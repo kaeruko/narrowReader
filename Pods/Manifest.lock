@@ -1,0 +1,29 @@
+PODS:
+  - Alamofire (4.7.3)
+  - BTNavigationDropdownMenu (0.4.1)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.7)
+  - BTNavigationDropdownMenu (from `https://github.com/PhamBaTho/BTNavigationDropdownMenu.git`, branch `swift-3.0`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+
+EXTERNAL SOURCES:
+  BTNavigationDropdownMenu:
+    :branch: swift-3.0
+    :git: https://github.com/PhamBaTho/BTNavigationDropdownMenu.git
+
+CHECKOUT OPTIONS:
+  BTNavigationDropdownMenu:
+    :commit: e11a720322afc8baa02b3ff63fcc630e4f9de577
+    :git: https://github.com/PhamBaTho/BTNavigationDropdownMenu.git
+
+SPEC CHECKSUMS:
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  BTNavigationDropdownMenu: 093f3cbfad1572f2c222bdf8d17584d1e13380d4
+
+PODFILE CHECKSUM: b5cda002b8426b9170c32a2440fcb6891cb44df1
+
+COCOAPODS: 1.5.3

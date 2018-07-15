@@ -1,0 +1,6 @@
+framework module Pods_narrowReader {
+  umbrella header "Pods-narrowReader-umbrella.h"
+
+  export *
+  module * { export * }
+}
