@@ -35,7 +35,12 @@ class SearchResultViewController: UIViewController, UITableViewDelegate {
 
     
     override func viewDidLoad() {
-print("")
+        // ナビゲーションバーの設定
+        navigationController?.navigationBar.backgroundColor = UIColor.green
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        // 遷移先でナビゲーションバーに戻るボタンを表示させない
+        navigationItem.setHidesBackButton(true, animated: false)
+
         self.title = "検索結果"
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
