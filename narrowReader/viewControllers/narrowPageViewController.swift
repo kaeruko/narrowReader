@@ -96,7 +96,13 @@ print(self.title)
 
     @objc open func doBtn(sender : UIButton) {
 print("doBtn")
-        present(self.searchModal, animated: true)
+        let vc = SearchModalViewController()
+        let naviVC = narrowNavigationViewController(rootViewController: vc)
+        naviVC.viewControllers = [vc]
+        present(naviVC, animated: true)
+//
+//
+//        present(self.searchModal, animated: true)
     }
     
 }

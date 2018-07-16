@@ -368,7 +368,17 @@ print(textField)
     lazy var  searchResult:SearchResultViewController = SearchResultViewController()
     
     @objc open func doSubmit(sender : UIButton) {
-        present(searchResult, animated: true)
+        let vc = SearchResultViewController()
+        let naviVC = narrowNavigationViewController(rootViewController: vc)
+        naviVC.viewControllers = [vc]
+        present(naviVC, animated: true)
+
+
+//        let vc = SearchResultViewController()
+//        let naviVC = narrowNavigationViewController(rootViewController: vc)
+//        self.navigationController?.pushViewController(naviVC, animated: true)
+
+
     }
     
 
