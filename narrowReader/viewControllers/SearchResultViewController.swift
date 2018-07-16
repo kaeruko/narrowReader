@@ -66,24 +66,17 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
             Constraint(item:self.searchBtn, .height,  to: navigationView, .height),
             Constraint(item:self.searchBtn, .right,   to: navigationView, .right, constant:0, multiplier: 1.0 ),
             Constraint(item:self.searchBtn, .width,   to: navigationView, .width, constant:0, multiplier: 1.0 ),
-            ])
+        ])
         print(self.title)
         self.navigationItem.title = self.title
     }
     
 
     @objc func backBtnTapped(){
-                let vc = HomeViewController()
-                let naviVC = narrowNavigationViewController(rootViewController: vc)
-                naviVC.viewControllers = [vc]
-                present(naviVC, animated: true)
-
-
-//        let rootController = HomeViewController()
-//        rootController.modalPresentationStyle = .custom
-//        rootController.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-//        present(rootController, animated: true, completion: nil)
-//        self.navigationController?.popViewController(animated: true)
+        let vc = HomeViewController()
+        let naviVC = narrowNavigationViewController(rootViewController: vc)
+        naviVC.viewControllers = [vc]
+        present(naviVC, animated: true)
     }
     
 
