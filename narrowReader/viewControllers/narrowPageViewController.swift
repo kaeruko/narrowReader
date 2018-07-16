@@ -96,10 +96,17 @@ print(self.title)
 
     @objc open func doBtn(sender : UIButton) {
 print("doBtn")
-        let vc = SearchModalViewController()
-        let naviVC = narrowNavigationViewController(rootViewController: vc)
-        naviVC.viewControllers = [vc]
-        present(naviVC, animated: true)
+
+        let modalViewController = SearchModalViewController()
+        modalViewController.modalPresentationStyle = .custom
+        modalViewController.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+        present(modalViewController, animated: true, completion: nil)
+
+//
+//        let vc = SearchModalViewController()
+//        let naviVC = narrowNavigationViewController(rootViewController: vc)
+//        naviVC.viewControllers = [vc]
+//        present(naviVC, animated: true)
 //
 //
 //        present(self.searchModal, animated: true)

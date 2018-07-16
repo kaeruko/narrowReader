@@ -98,8 +98,7 @@ class HomeViewController: narrowBaseViewController, UITableViewDelegate, UITable
         let modalViewController = SearchModalViewController()
         modalViewController.modalPresentationStyle = .custom
         modalViewController.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-        //present(modalViewController, animated: true, completion: nil)
-        navigationController?.pushViewController(modalViewController as UIViewController, animated: true)
+        present(modalViewController, animated: true, completion: nil)
 
     }
     

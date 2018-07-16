@@ -369,15 +369,15 @@ print(textField)
     
     @objc open func doSubmit(sender : UIButton) {
 
-//        let vc = SearchResultViewController()
-//        let naviVC = narrowNavigationViewController(rootViewController: vc)
-//        naviVC.viewControllers = [vc]
-////        present(naviVC, animated: true)
-//
-//        naviVC.pushViewController(vc, animated: true)
         let vc = SearchResultViewController()
         let naviVC = narrowNavigationViewController(rootViewController: vc)
-        self.navigationController?.pushViewController(vc, animated: true)
+        naviVC.viewControllers = [vc]
+        present(naviVC, animated: true)
+//
+//        naviVC.pushViewController(vc, animated: true)
+//        let vc = SearchResultViewController()
+//        let naviVC = narrowNavigationViewController(rootViewController: vc)
+//        self.navigationController?.pushViewController(vc, animated: true)
 
 
     }
