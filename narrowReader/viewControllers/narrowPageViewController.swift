@@ -40,7 +40,7 @@ class narrowPageViewController: narrowBaseViewController, UIViewControllerTransi
         self.searchModal.modalHeight = self.modalHeight
         self.searchModal.modalOriginX = self.modalOriginX
         self.searchModal.modalOriginY = self.modalOriginY
-        self.searchModal.modalPresentationStyle = .custom
+        self.searchModal.modalPresentationStyle = .formSheet
         self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
         self.searchModal.view.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
         self.createNavigationItems()
@@ -71,6 +71,7 @@ print(self.title)
     
     open func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
 
+        print("presentationController")
         di = SearchPresentationController(presentedViewController: presented, presenting: presenting)
         di.modalWidth = self.modalWidth
         di.modalHeight = self.modalHeight
@@ -95,8 +96,7 @@ print(self.title)
 
     @objc open func doBtn(sender : UIButton) {
 print("doBtn")
-                let searchModal = storyboard?.instantiateViewController(withIdentifier: "SearchModal")
-        present(searchModal!, animated: true)
+        present(self.searchModal, animated: true)
     }
     
 }

@@ -29,6 +29,7 @@ class SearchPresentationController: UIPresentationController {
         })
     }
     
+
     override func dismissalTransitionWillBegin() {
         //        super.dismissalTransitionWillBegin()
         // 非表示トランジション開始前の処理
@@ -66,7 +67,7 @@ class SearchPresentationController: UIPresentationController {
 
     override func containerViewWillLayoutSubviews() {
         super.containerViewWillLayoutSubviews()
-        
+print("containerViewWillLayoutSubviews")
         /// レイアウト開始前の処理
         overlayView.frame = containerView!.bounds
         presentedView?.frame = frameOfPresentedViewInContainerView

@@ -12,6 +12,10 @@ import RealmSwift
 
 class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, UIPickerViewDelegate,UIToolbarDelegate, UIPickerViewDataSource, UITextInputDelegate {
 
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return SearchPresentationController(presentedViewController: presented, presenting: presenting)
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField){
 print(textField)
         print("textFieldDidBeginEditing:" + textField.text!)
@@ -353,12 +357,12 @@ print(textField)
     }
 
     var di:UIPresentationController!
-
-    open func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        
-        di = UIPresentationController(presentedViewController: presented, presenting: presenting)
-        return di
-    }
+//
+//    open func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+//        
+//        di = UIPresentationController(presentedViewController: presented, presenting: presenting)
+//        return di
+//    }
     
     
     lazy var  searchResult:SearchResultViewController = SearchResultViewController()
