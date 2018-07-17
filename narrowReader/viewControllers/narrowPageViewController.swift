@@ -12,12 +12,6 @@ import RealmSwift
 
 class narrowPageViewController: narrowBaseViewController, SearchModalViewControllerDelegate, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
 
-    func modalDidFinished(modaltext: String) {
-        print(modaltext)
-        self.searchModal.dismiss(animated: true, completion: nil)
-    }
-    
-    
     var modalWidth : CGFloat = 0.0
     var modalHeight : CGFloat = 0.0
     var modalOriginX : CGFloat = 0.0
@@ -25,8 +19,15 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
 
     var di:SearchPresentationController!
     lazy public var searchBtn: UIButton = self.createSearchButton()
+    lazy var  searchModal:SearchModalViewController = SearchModalViewController()
 
-    var segue :UIStoryboardSegue!
+
+    func modalDidFinished(modaltext: String) {
+        print(modaltext)
+        self.searchModal.dismiss(animated: true, completion: nil)
+        let secondVC = SearchResultViewController()
+        self.navigationController?.pushViewController(secondVC, animated: true)
+    }
 
     func setRect() {
         let w = self.view.frame.width
@@ -42,13 +43,9 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
         navigationController?.delegate = self
         self.setRect()
         self.searchBtn = self.createSearchButton()
-        self.searchModal.modalWidth = self.modalWidth
-        self.searchModal.modalHeight = self.modalHeight
-        self.searchModal.modalOriginX = self.modalOriginX
-        self.searchModal.modalOriginY = self.modalOriginY
         self.searchModal.modalPresentationStyle = .formSheet
         self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-        self.searchModal.view.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
+        self.searchModal.view.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         self.createNavigationItems()
     }
     
@@ -98,27 +95,22 @@ print(self.title)
         return btn
     }
     
-
-    lazy var  searchModal:SearchModalViewController = SearchModalViewController()
-
     @objc open func doBtn(sender : UIButton) {
-print("doBtn")
-
         self.searchModal.modalPresentationStyle = .custom
         self.searchModal.delegate = self as! SearchModalViewControllerDelegate
-
+        
         self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
         present(self.searchModal, animated: true, completion: nil)
-
-//
-//        let vc = SearchModalViewController()
-//        let naviVC = narrowNavigationViewController(rootViewController: vc)
-//        naviVC.viewControllers = [vc]
-//        present(naviVC, animated: true)
-//
-//
-//        present(self.searchModal, animated: true)
+        
+        //
+        //
+        //        let modalViewController = SearchModalViewController()
+        //        modalViewController.modalPresentationStyle = .custom
+        //        modalViewController.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+        //        present(modalViewController, animated: true, completion: nil)
+        
     }
+    
     
 }
 
