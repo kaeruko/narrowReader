@@ -46,7 +46,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         self.view.backgroundColor = UIColor.white
         self.searchByApi()
         print(self.search_word)
-        let backBtn = UIBarButtonItem(title: "小説家にnarrow", style: .plain, target: self, action: #selector(self.backBtnTapped))
+        let backBtn = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(self.backBtnTapped))
         self.navigationItem.leftBarButtonItem = backBtn
 
         self.createNavigationItems()
@@ -73,11 +73,15 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
 
     @objc func backBtnTapped(){
-        let vc = HomeViewController()
-        let naviVC = narrowNavigationViewController(rootViewController: vc)
-        naviVC.viewControllers = [vc]
-        present(naviVC, animated: true)
+        self.navigationController?.popViewController(animated: true)
+
+
+//        let vc = HomeViewController()
+//        let naviVC = narrowNavigationViewController(rootViewController: vc)
+//        naviVC.viewControllers = [vc]
+//        present(naviVC, animated: true)
     }
+    
     
 
     

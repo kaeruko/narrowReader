@@ -16,6 +16,17 @@ class HomeViewController: narrowBaseViewController, SearchModalViewControllerDel
     func modalDidFinished(modaltext: String) {
         print(modaltext)
         self.searchModal.dismiss(animated: true, completion: nil)
+
+        let secondVC = SearchResultViewController()
+        self.navigationController?.pushViewController(secondVC, animated: true)
+
+
+//        let vc = SearchResultViewController()
+//        let naviVC = narrowNavigationViewController(rootViewController: vc)
+//        naviVC.viewControllers = [vc]
+//        present(vc, animated: true)
+
+
     }
 
     var modalWidth : CGFloat = 0.0
