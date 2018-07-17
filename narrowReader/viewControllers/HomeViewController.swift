@@ -19,14 +19,6 @@ class HomeViewController: narrowBaseViewController, SearchModalViewControllerDel
 
         let secondVC = SearchResultViewController()
         self.navigationController?.pushViewController(secondVC, animated: true)
-
-
-//        let vc = SearchResultViewController()
-//        let naviVC = narrowNavigationViewController(rootViewController: vc)
-//        naviVC.viewControllers = [vc]
-//        present(vc, animated: true)
-
-
     }
 
     var modalWidth : CGFloat = 0.0

@@ -74,12 +74,6 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
 
     @objc func backBtnTapped(){
         self.navigationController?.popViewController(animated: true)
-
-
-//        let vc = HomeViewController()
-//        let naviVC = narrowNavigationViewController(rootViewController: vc)
-//        naviVC.viewControllers = [vc]
-//        present(naviVC, animated: true)
     }
     
     
