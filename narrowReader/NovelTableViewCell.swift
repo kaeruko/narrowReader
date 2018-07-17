@@ -51,11 +51,18 @@ class NovelTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.title = self.createLabel()
         self.story = self.createLabel()
-        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 20)
-        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.centerX, constant: 0)
+        self.title.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width * 0.9 , height: 0))
+        self.story.frame(forAlignmentRect: CGRect(x: 0, y: 30, width: self.frame.width * 0.9 , height: 200))
+        self.title.numberOfLines = 0
+        self.story.numberOfLines = 0
+        self.title.adjustsFontSizeToFitWidth = true
+        self.story.adjustsFontSizeToFitWidth = true
+//        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 0)
+//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 300)
 
-        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 40)
-        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.centerX, constant: 0)
+//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.leading, constant: 10)
+//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.trailing, constant: 10)
+//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 30)
 
     }
 

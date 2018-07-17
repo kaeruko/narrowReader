@@ -28,7 +28,9 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         
         
         let myTableView = UITableView(frame: view.frame, style: .plain)
+        myTableView.estimatedRowHeight = 200
         myTableView.rowHeight = UITableViewAutomaticDimension
+        //        myTableView.rowHeight = UITableViewAutomaticDimension
         myTableView.delegate      =   self as UITableViewDelegate
         myTableView.dataSource    =   self as! UITableViewDataSource
         myTableView.register(NovelTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(NovelTableViewCell.self))
@@ -49,11 +51,11 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Sample"
+        return "検索結果"
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -99,11 +101,8 @@ print(dir)
         
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
         //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
-        Alamofire.request("https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81", headers:["Cookie": "over18=yes;"]).responseJSON { response in      //連載
+        Alamofire.request("https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81", headers:["Cookie": "over18=yes;"]).response { response in      //連載
             
-            if let json = response.result.value {
-                //                print("JSON: \(json)") // serialized json response
-            }
             
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
                 //                print("Data: \(utf8Text)") // original server data as UTF8 string
