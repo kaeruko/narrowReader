@@ -166,9 +166,6 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         return textfield
     }
     
-    open func layoutElement(target : UIView, element : UIView, attr: NSLayoutAttribute, constant: CGFloat, mult: CGFloat = 1.0){
-        target.addConstraint(Constraint(item:element, attr,    to: target, attr,    constant: constant,  multiplier:mult))
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -317,7 +314,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     
     @objc func setSwitch(sender:UISwitch) {
         print(sender.tag)
-        
+        print(sender.isOn)
     }
     
     

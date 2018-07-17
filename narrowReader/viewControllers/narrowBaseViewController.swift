@@ -13,6 +13,10 @@ class narrowBaseViewController: UIViewController {
     lazy var frameWidth : CGFloat = self.view.frame.width
     lazy var frameHeight : CGFloat = self.view.frame.height
 
+    open func layoutElement(target : UIView, element : UIView, attr: NSLayoutAttribute, constant: CGFloat, mult: CGFloat = 1.0){
+        target.addConstraint(Constraint(item:element, attr,    to: target, attr,    constant: constant,  multiplier:mult))
+    }
+
     public func Constraint(item: AnyObject, _ attr: NSLayoutAttribute, to: AnyObject?, _ attrTo: NSLayoutAttribute, constant: CGFloat = 0.0, multiplier: CGFloat = 1.0, relate: NSLayoutRelation = .equal, priority: UILayoutPriority = UILayoutPriority.required) -> NSLayoutConstraint {
         let ret = NSLayoutConstraint(
             item:       item,

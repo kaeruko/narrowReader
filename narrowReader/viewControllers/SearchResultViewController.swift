@@ -10,29 +10,14 @@ import UIKit
 import Alamofire
 import RealmSwift
 
-class SearchResultViewController: narrowPageViewController,  UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.novelcount
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> NovelTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "searchResult", for: indexPath) as! NovelTableViewCell
-        cell.title?.text = self.results?[indexPath.row]["title"] as? String
-        cell.story?.text = self.results?[indexPath.row]["story"] as? String
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
-        //画面遷移
-    }
+class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource {
+
 
     var nnumber:Int?
     var search_word:String?
     var novelcount : Int = 0
     var results:[Dictionary<String,Any?>]?=[]
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +25,40 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         self.view.backgroundColor = UIColor.white
         self.searchByApi()
         print(self.search_word)
+        
+        
+        let myTableView = UITableView(frame: view.frame, style: .plain)
+        myTableView.rowHeight = UITableViewAutomaticDimension
+        myTableView.delegate      =   self as UITableViewDelegate
+        myTableView.dataSource    =   self as! UITableViewDataSource
+        myTableView.register(NovelTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(NovelTableViewCell.self))
+        self.view.addSubview(myTableView)
+        
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.novelcount
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(NovelTableViewCell.self), for: indexPath) as! NovelTableViewCell
+        cell.title?.text = self.results?[indexPath.row]["title"] as? String
+        cell.story?.text = self.results?[indexPath.row]["story"] as? String
+        cell.layoutIfNeeded()
+        return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Sample"
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    }
+
     open func searchByApi() {
         
         let file_name = "search.txt"
