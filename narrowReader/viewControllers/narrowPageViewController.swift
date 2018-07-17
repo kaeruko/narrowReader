@@ -30,8 +30,8 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
     }
 
     func setRect() {
-        let w = self.view.frame.width
-        let h = self.view.frame.height
+        let w = self.frameWidth
+        let h = self.frameHeight
         self.modalWidth = w * 0.9
         self.modalHeight = h * 0.7
         self.modalOriginX =  ( w - self.modalWidth) * 0.5
@@ -49,6 +49,10 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
         self.createNavigationItems()
     }
     
+    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
+        return SearchPresentationController(presentedViewController: presented, presenting: presenting)
+    }
+
     
     func navigationController() {
         print("navigationController")
@@ -101,14 +105,6 @@ print(self.title)
         
         self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
         present(self.searchModal, animated: true, completion: nil)
-        
-        //
-        //
-        //        let modalViewController = SearchModalViewController()
-        //        modalViewController.modalPresentationStyle = .custom
-        //        modalViewController.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-        //        present(modalViewController, animated: true, completion: nil)
-        
     }
     
     

@@ -22,15 +22,16 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField){
-        print(textField)
         print("textFieldDidBeginEditing:" + textField.text!)
     }
     
     var search_word : String = ""
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // キーボードを隠す
+        
         textField.resignFirstResponder()
         print("textFieldShouldReturn:" + textField.text!)
+        print(textField.tag)
         self.search_word = textField.text!
         //検索
         return true
@@ -50,7 +51,6 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     
     // クリアボタンが押された時の処理
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        
         print("Clear" + textField.text!)
         print(textField)
         return true
@@ -155,7 +155,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     }
     
     open func createTextField() -> UITextField{
-        var textfield = UITextField(frame: CGRect(x: 0, y: 0, width: self.view.frame.width * 0.6, height: 50))
+        var textfield = UITextField(frame: CGRect(x: 0, y: 0, width: self.frameWidth * 0.6, height: 50))
         textfield = self.createUIView(uiview: textfield) as! UITextField
         textfield.backgroundColor = UIColor.white
         textfield.adjustsFontSizeToFitWidth = true
@@ -174,8 +174,8 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.gray
         
-        let w = self.view.frame.width
-        let h = self.view.frame.height
+        let w = self.frameWidth
+        let h = self.frameHeight
         let modalWidth = w * 0.9
         let modalHeight = h * 0.7
         let modalOriginX =  ( w - modalWidth) * 0.5
@@ -200,6 +200,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         self.layoutElement(target: self.view, element: self.searchTitleLabel, attr: NSLayoutAttribute.leading, constant: rightmargin)
         
         //検索フォーム
+        self.searchTextField.tag = 1
         self.searchTextField.placeholder = "検索フォーム";
         self.layoutElement(target: self.view, element: self.searchTextField, attr: NSLayoutAttribute.top, constant: topmargin + marginatline)
         self.layoutElement(target: self.view, element: self.searchTextField, attr: NSLayoutAttribute.trailing, constant: modalWidth * -0.1)
@@ -214,6 +215,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         self.layoutElement(target: self.view, element: self.ignoreTitleLabel, attr: NSLayoutAttribute.leading, constant: rightmargin)
         
         //除外フォーム
+        self.ignoreTextField.tag = 2
         self.ignoreTextField.placeholder = "除外フォーム"
         self.layoutElement(target: self.view, element: self.ignoreTextField, attr: NSLayoutAttribute.top, constant: topmargin + (marginatline * 2.0))
         self.layoutElement(target: self.view, element: self.ignoreTextField, attr: NSLayoutAttribute.trailing, constant: modalWidth * -0.1)
@@ -224,7 +226,8 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         self.layoutElement(target: self.view, element: self.titleNameLabel, attr: NSLayoutAttribute.top, constant: topmargin + (marginatline * 3.0)+8)
         self.layoutElement(target: self.view, element: self.titleNameLabel, attr: NSLayoutAttribute.leading, constant: rightmargin)
         
-        self.titleNameSwitch.addTarget(self, action: #selector(self.checkView(sender:)), for: UIControlEvents.valueChanged)
+        self.titleNameSwitch.tag = 1
+        self.titleNameSwitch.addTarget(self, action: #selector(self.setSwitch(sender:)), for: UIControlEvents.valueChanged)
         self.titleNameSwitch.isOn = true
         self.view.addConstraint(Constraint(item:self.titleNameSwitch, .top,    to: self.view, .top,    constant:topmargin + (marginatline * 3.0)))
         self.view.addConstraint(Constraint(item:self.titleNameSwitch, .leading,  to: self.view, .leading,  constant: modalWidth * 0.34,   multiplier: 1.0))
@@ -233,7 +236,8 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         self.layoutElement(target: self.view, element: self.plotLabel, attr: NSLayoutAttribute.top, constant: topmargin + (marginatline * 3.0)+8)
         self.layoutElement(target: self.view, element: self.plotLabel, attr: NSLayoutAttribute.trailing, constant:  modalWidth * -0.28)
         
-        self.plotSwitch.addTarget(self, action: #selector(self.checkView(sender:)), for: UIControlEvents.valueChanged)
+        self.plotSwitch.tag = 2
+        self.plotSwitch.addTarget(self, action: #selector(self.setSwitch(sender:)), for: UIControlEvents.valueChanged)
         self.layoutElement(target: self.view, element: self.plotSwitch, attr: NSLayoutAttribute.top, constant: topmargin + (marginatline * 3.0))
         self.layoutElement(target: self.view, element: self.plotSwitch, attr: NSLayoutAttribute.trailing, constant:  modalWidth * -0.1)
         
@@ -242,7 +246,8 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         self.layoutElement(target: self.view, element: self.keywordLabel, attr: NSLayoutAttribute.top, constant: topmargin + (marginatline * 4.0)+8)
         self.layoutElement(target: self.view, element: self.keywordLabel, attr: NSLayoutAttribute.leading, constant: rightmargin)
         
-        self.keywordSwitch.addTarget(self, action: #selector(self.checkView(sender:)), for: UIControlEvents.valueChanged)
+        self.keywordSwitch.tag = 3
+        self.keywordSwitch.addTarget(self, action: #selector(self.setSwitch(sender:)), for: UIControlEvents.valueChanged)
         self.view.addConstraint(Constraint(item:self.keywordSwitch, .top,    to: self.view, .top,    constant:topmargin + (marginatline * 4.0)))
         self.view.addConstraint(Constraint(item:self.keywordSwitch, .leading,  to: self.view, .leading,  constant: modalWidth * 0.34,   multiplier: 1.0))
         
@@ -250,7 +255,8 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         self.layoutElement(target: self.view, element: self.autherLabel, attr: NSLayoutAttribute.top, constant: topmargin + (marginatline * 4.0)+8)
         self.layoutElement(target: self.view, element: self.autherLabel, attr: NSLayoutAttribute.trailing, constant:  modalWidth * -0.28)
         
-        self.autherSwitch.addTarget(self, action: #selector(self.checkView(sender:)), for: UIControlEvents.valueChanged)
+        self.autherSwitch.tag = 4
+        self.autherSwitch.addTarget(self, action: #selector(self.setSwitch(sender:)), for: UIControlEvents.valueChanged)
         self.layoutElement(target: self.view, element: self.autherSwitch, attr: NSLayoutAttribute.top, constant: topmargin + (marginatline * 4.0))
         self.layoutElement(target: self.view, element: self.autherSwitch, attr: NSLayoutAttribute.trailing, constant:  modalWidth * -0.1)
         
@@ -309,8 +315,8 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     }
     
     
-    @objc func checkView(sender:UISwitch) {
-        print(sender)
+    @objc func setSwitch(sender:UISwitch) {
+        print(sender.tag)
         
     }
     

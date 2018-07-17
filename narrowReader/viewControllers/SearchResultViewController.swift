@@ -35,49 +35,12 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
 
     
     override func viewDidLoad() {
-        // ナビゲーションバーの設定
-        navigationController?.navigationBar.backgroundColor = UIColor.green
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        // 遷移先でナビゲーションバーに戻るボタンを表示させない
-        navigationItem.setHidesBackButton(true, animated: false)
-
-        self.title = "検索結果"
         super.viewDidLoad()
+        self.title = "検索結果"
         self.view.backgroundColor = UIColor.white
         self.searchByApi()
         print(self.search_word)
-        let backBtn = UIBarButtonItem(title: "戻る", style: .plain, target: self, action: #selector(self.backBtnTapped))
-        self.navigationItem.leftBarButtonItem = backBtn
-
-        self.createNavigationItems()
     }
-    
-    
-    private func createNavigationItems() {
-        let navigationView = UIView(frame: CGRect(x: 0, y: 0, width: frameWidth, height: frameHeight * 1))
-        navigationView.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.1)
-        let naviItem = UIBarButtonItem(customView: navigationView)
-        self.navigationItem.rightBarButtonItem = naviItem
-        navigationView.addSubview(self.searchBtn)
-        
-        self.searchBtn.translatesAutoresizingMaskIntoConstraints = false
-        navigationView.addConstraints([
-            Constraint(item:self.searchBtn, .top,     to: navigationView, .top, constant:0, multiplier:1.0),
-            Constraint(item:self.searchBtn, .height,  to: navigationView, .height),
-            Constraint(item:self.searchBtn, .right,   to: navigationView, .right, constant:0, multiplier: 1.0 ),
-            Constraint(item:self.searchBtn, .width,   to: navigationView, .width, constant:0, multiplier: 1.0 ),
-        ])
-        print(self.title)
-        self.navigationItem.title = self.title
-    }
-    
-
-    @objc func backBtnTapped(){
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    
-
     
     open func searchByApi() {
         

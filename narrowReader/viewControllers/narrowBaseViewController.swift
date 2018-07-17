@@ -10,7 +10,6 @@ import UIKit
 
 class narrowBaseViewController: UIViewController {
     
-    //何度も使うのでキャスト
     lazy var frameWidth : CGFloat = self.view.frame.width
     lazy var frameHeight : CGFloat = self.view.frame.height
 
