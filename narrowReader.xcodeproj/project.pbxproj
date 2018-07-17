@@ -27,7 +27,6 @@
 		44412E7220F6E4AA001A6919 /* SearchPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44412E7120F6E4AA001A6919 /* SearchPresentationController.swift */; };
 		44412E7420F6E834001A6919 /* narrowPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44412E7320F6E834001A6919 /* narrowPageViewController.swift */; };
 		444B09D620F72C390033B45F /* narrowBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444B09D520F72C390033B45F /* narrowBaseViewController.swift */; };
-		447D3A1D20F9D3E700AEEA31 /* checkBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A1C20F9D3E700AEEA31 /* checkBox.swift */; };
 		447D3A2720FAE91300AEEA31 /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A2620FAE91300AEEA31 /* SearchResultViewController.swift */; };
 		447D3A2920FB196A00AEEA31 /* NovelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A2820FB196A00AEEA31 /* NovelTableViewCell.swift */; };
 		447D3A2B20FB7A0A00AEEA31 /* narrowNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A2A20FB7A0A00AEEA31 /* narrowNavigationViewController.swift */; };
@@ -92,7 +91,6 @@
 		44412E7120F6E4AA001A6919 /* SearchPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresentationController.swift; sourceTree = "<group>"; };
 		44412E7320F6E834001A6919 /* narrowPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = narrowPageViewController.swift; sourceTree = "<group>"; };
 		444B09D520F72C390033B45F /* narrowBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = narrowBaseViewController.swift; sourceTree = "<group>"; };
-		447D3A1C20F9D3E700AEEA31 /* checkBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = checkBox.swift; sourceTree = "<group>"; };
 		447D3A2620FAE91300AEEA31 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		447D3A2820FB196A00AEEA31 /* NovelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelTableViewCell.swift; sourceTree = "<group>"; };
 		447D3A2A20FB7A0A00AEEA31 /* narrowNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = narrowNavigationViewController.swift; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 				44336C5A20F62431007F2C11 /* LaunchScreen.storyboard */,
 				44336C5D20F62431007F2C11 /* Info.plist */,
 				44412E7120F6E4AA001A6919 /* SearchPresentationController.swift */,
-				447D3A1C20F9D3E700AEEA31 /* checkBox.swift */,
 				447D3A2820FB196A00AEEA31 /* NovelTableViewCell.swift */,
 				447D3A2A20FB7A0A00AEEA31 /* narrowNavigationViewController.swift */,
 			);
@@ -455,7 +452,6 @@
 				44412E7420F6E834001A6919 /* narrowPageViewController.swift in Sources */,
 				44336C8120F6247C007F2C11 /* HomeViewController.swift in Sources */,
 				447D3A2920FB196A00AEEA31 /* NovelTableViewCell.swift in Sources */,
-				447D3A1D20F9D3E700AEEA31 /* checkBox.swift in Sources */,
 				44412E7020F6E36B001A6919 /* SearchModalViewController.swift in Sources */,
 				444B09D620F72C390033B45F /* narrowBaseViewController.swift in Sources */,
 				447D3A2B20FB7A0A00AEEA31 /* narrowNavigationViewController.swift in Sources */,

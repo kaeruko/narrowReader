@@ -11,8 +11,13 @@ import Alamofire
 import RealmSwift
 import BTNavigationDropdownMenu
 
-class HomeViewController: narrowBaseViewController, UITableViewDelegate, UITableViewDataSource,UIViewControllerTransitioningDelegate {
+class HomeViewController: narrowBaseViewController, SearchModalViewControllerDelegate, UITableViewDelegate, UITableViewDataSource,UIViewControllerTransitioningDelegate {
     
+    func modalDidFinished(modaltext: String) {
+        print(modaltext)
+        self.searchModal.dismiss(animated: true, completion: nil)
+    }
+
     var modalWidth : CGFloat = 0.0
     var modalHeight : CGFloat = 0.0
     var modalOriginX : CGFloat = 0.0
@@ -95,10 +100,18 @@ class HomeViewController: narrowBaseViewController, UITableViewDelegate, UITable
     }
 
     @objc open func doBtn(sender : UIButton) {
-        let modalViewController = SearchModalViewController()
-        modalViewController.modalPresentationStyle = .custom
-        modalViewController.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-        present(modalViewController, animated: true, completion: nil)
+        self.searchModal.modalPresentationStyle = .custom
+        self.searchModal.delegate = self as! SearchModalViewControllerDelegate
+        
+        self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+        present(self.searchModal, animated: true, completion: nil)
+
+//
+//
+//        let modalViewController = SearchModalViewController()
+//        modalViewController.modalPresentationStyle = .custom
+//        modalViewController.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+//        present(modalViewController, animated: true, completion: nil)
 
     }
     

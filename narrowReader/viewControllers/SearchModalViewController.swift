@@ -377,7 +377,7 @@ print(textField)
     @objc open func doSubmit(sender : UIButton) {
 
         self.delegate?.modalDidFinished(modaltext: "戻ったよ")
-        self.dismiss(animated: true, completion: nil)
+//        self.dismiss(animated: true, completion: nil)
         //        let vc = SearchResultViewController()
 //        let naviVC = narrowNavigationViewController(rootViewController: vc)
 //        naviVC.viewControllers = [vc]
