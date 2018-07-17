@@ -53,10 +53,11 @@ class SearchPresentationController: UIPresentationController {
         let w = presentedViewFrame.size.width
         let h = presentedViewFrame.size.height
         self.modalWidth = w * 0.9
-        self.modalHeight = h * 0.9
+        self.modalHeight = h * 0.7
         presentedViewFrame.size = CGSize(width: self.modalWidth, height: self.modalHeight)
         presentedViewFrame.origin.x = ( w - modalWidth) * 0.5
-        presentedViewFrame.origin.y = ( h - modalHeight) * 0.1
+        presentedViewFrame.origin.y = ( h - modalHeight) * 0.5
+print(( h - modalHeight) * 0.5)
         return presentedViewFrame
     }
 
