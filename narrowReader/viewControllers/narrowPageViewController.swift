@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import RealmSwift
 
-class narrowPageViewController: narrowBaseViewController, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
+class narrowPageViewController: narrowBaseViewController, SearchModalViewControllerDelegate, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
     
     var modalWidth : CGFloat = 0.0
     var modalHeight : CGFloat = 0.0
@@ -44,6 +44,11 @@ class narrowPageViewController: narrowBaseViewController, UIViewControllerTransi
         self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
         self.searchModal.view.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
         self.createNavigationItems()
+    }
+    
+    func modalDidFinished(modaltext :String){
+        print(modaltext)
+        self.searchModal.dismiss(animated: true, completion: nil)
     }
     
     func navigationController() {
@@ -99,6 +104,8 @@ print("doBtn")
 
         let modalViewController = SearchModalViewController()
         modalViewController.modalPresentationStyle = .custom
+        modalViewController.delegate = self as! SearchModalViewControllerDelegate
+
         modalViewController.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
         present(modalViewController, animated: true, completion: nil)
 

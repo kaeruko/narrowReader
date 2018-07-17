@@ -6,6 +6,11 @@
 //  Copyright © 2018年 kaeruko. All rights reserved.
 //
 
+protocol SearchModalViewControllerDelegate {
+    func modalDidFinished(modaltext: String)
+}
+
+
 import UIKit
 import Alamofire
 import RealmSwift
@@ -71,6 +76,8 @@ print(textField)
     lazy var modalOriginX : CGFloat = 0
     lazy var modalOriginY : CGFloat = 0
 
+    var delegate: SearchModalViewControllerDelegate! = nil
+    
     var ntypes: NSArray = ["新着順","ブクマ順","レビュー順","評価順","評価者順","文字数順","新しい順"]
     var nocgenres: NSArray = ["すべて","女性向け", "BL"]
     
@@ -368,10 +375,13 @@ print(textField)
     lazy var  searchResult:SearchResultViewController = SearchResultViewController()
     
     @objc open func doSubmit(sender : UIButton) {
-        let vc = SearchResultViewController()
-        let naviVC = narrowNavigationViewController(rootViewController: vc)
-        naviVC.viewControllers = [vc]
-        present(naviVC, animated: true)
+
+        self.delegate?.modalDidFinished(modaltext: "戻ったよ")
+        self.dismiss(animated: true, completion: nil)
+        //        let vc = SearchResultViewController()
+//        let naviVC = narrowNavigationViewController(rootViewController: vc)
+//        naviVC.viewControllers = [vc]
+//        present(naviVC, animated: true)
     }
     
 

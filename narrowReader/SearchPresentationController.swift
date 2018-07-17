@@ -80,6 +80,7 @@ print("containerViewWillLayoutSubviews")
     @objc func overlayDidTouch(_ sender: UITapGestureRecognizer){
         print("overlayDidTouch")
         self.presentedViewController.dismiss(animated: true, completion: nil)
+
     }
     
 }
