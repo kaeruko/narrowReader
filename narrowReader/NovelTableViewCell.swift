@@ -49,20 +49,21 @@ class NovelTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.title = self.createLabel()
+//        self.title = self.createLabel()
         self.story = self.createLabel()
-        self.title.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width * 0.9 , height: 0))
-        self.story.frame(forAlignmentRect: CGRect(x: 0, y: 30, width: self.frame.width * 0.9 , height: 200))
-        self.title.numberOfLines = 0
+//        self.title.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width * 0.9 , height: 0))
+        self.story.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width, height: 0))
+//        self.title.numberOfLines = 0
         self.story.numberOfLines = 0
-        self.title.adjustsFontSizeToFitWidth = true
-        self.story.adjustsFontSizeToFitWidth = false
-        self.story.font = UIFont.systemFont(ofSize: 12)
-        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 2)
-        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.leading, constant: 2)
+//        self.title.adjustsFontSizeToFitWidth = true
+        self.story.adjustsFontSizeToFitWidth = true
+//        self.story.font = UIFont.systemFont(ofSize: 12)
+//        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 2)
+//        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.leading, constant: 2)
+//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.centerX, constant: 0)
 
-        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 30)
-        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.leading, constant: 2)
+//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 30)
+//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.leading, constant: 2)
 //        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 30)
 
     }

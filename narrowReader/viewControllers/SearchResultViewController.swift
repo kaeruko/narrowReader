@@ -28,9 +28,8 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         
         
         let myTableView = UITableView(frame: view.frame, style: .plain)
-        myTableView.estimatedRowHeight = 200
+        myTableView.estimatedRowHeight = UITableViewAutomaticDimension
         myTableView.rowHeight = UITableViewAutomaticDimension
-        //        myTableView.rowHeight = UITableViewAutomaticDimension
         myTableView.delegate      =   self as UITableViewDelegate
         myTableView.dataSource    =   self as! UITableViewDataSource
         myTableView.register(NovelTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(NovelTableViewCell.self))
