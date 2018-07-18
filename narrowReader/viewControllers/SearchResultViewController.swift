@@ -12,7 +12,6 @@ import RealmSwift
 
 class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource {
     
-    
     var nnumber:Int?
     var search_word:String?
     var novelcount : Int = 0
@@ -47,10 +46,10 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(NovelTableViewCell.self), for: indexPath) as! NovelTableViewCell
-        cell.summary?.font = UIFont.systemFont(ofSize: 12)
-        cell.summary?.minimumScaleFactor = 15.0/15.0;
         cell.summary?.adjustsFontSizeToFitWidth = true
         cell.summary?.numberOfLines = 0
+        cell.summary?.font = UIFont.systemFont(ofSize: 12)
+//        cell.summary?.minimumScaleFactor = 15.0/15.0; //つけると文字が読めるようになる
         cell.summary?.text = self.results?[indexPath.row]["story"] as? String
         cell.title?.text = self.results?[indexPath.row]["title"] as? String
         cell.layoutIfNeeded()
@@ -61,11 +60,13 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         return 1
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "検索結果"
-    }
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "検索結果"
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(self.results![indexPath.row]["ncode"])
+        print(self.results![indexPath.row]["title"])
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -108,7 +109,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
         //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
-        Alamofire.request("https://api.syosetu.com/novel18api/api/?libtype=1&out=json&nocgenre=2&word=%E7%9B%A3%E7%A6%81", headers:["Cookie": "over18=yes;"]).response { response in      //連載
+        Alamofire.request("https://api.syosetu.com/novel18api/api/?libtype=1&out=json&nocgenre=3&word=%E7%9B%A3%E7%A6%81", headers:["Cookie": "over18=yes;"]).response { response in      //連載
             
             
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
@@ -121,7 +122,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
 
                     for n in items {
                         let i = n as! Dictionary<String,Any?>
-                        print(i["story"])
+//                        print(i["story"])
 
                         if((i["title"] == nil)){continue}
                         self.results?.append(["title": i["title"], "ncode" : i["ncode"], "general_all_no":i["general_all_no"], "novel_type": i["novel_type"],"story": i["story"] ])
@@ -133,11 +134,15 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
                     let myTableView = UITableView(frame: self.view.frame, style: .plain)
                     myTableView.estimatedRowHeight = UITableViewAutomaticDimension
                     myTableView.rowHeight = UITableViewAutomaticDimension
+                    myTableView.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.view.frame.width*1.5, height: 0))
                     myTableView.flashScrollIndicators()
                     myTableView.delegate      =   self as UITableViewDelegate
                     myTableView.dataSource    =   self as! UITableViewDataSource
                     myTableView.register(NovelTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(NovelTableViewCell.self))
                     self.view.addSubview(myTableView)
+                    myTableView.translatesAutoresizingMaskIntoConstraints = false
+//                    self.layoutElement(target: self.view, element: myTableView, attr: NSLayoutAttribute.top, constant: 1)
+//                    self.layoutElement(target: self.view, element: myTableView, attr: NSLayoutAttribute.trailing, constant: -1)
 
                 } catch {
                     print(error)
