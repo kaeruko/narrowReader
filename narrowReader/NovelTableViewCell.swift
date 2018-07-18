@@ -56,12 +56,13 @@ class NovelTableViewCell: UITableViewCell {
         self.title.numberOfLines = 0
         self.story.numberOfLines = 0
         self.title.adjustsFontSizeToFitWidth = true
-        self.story.adjustsFontSizeToFitWidth = true
-//        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 0)
-//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 300)
+        self.story.adjustsFontSizeToFitWidth = false
+        self.story.font = UIFont.systemFont(ofSize: 12)
+        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 2)
+        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.leading, constant: 2)
 
-//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.leading, constant: 10)
-//        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.trailing, constant: 10)
+        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 30)
+        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.leading, constant: 2)
 //        self.layoutElement(target: self, element: self.story, attr: NSLayoutAttribute.top, constant: 30)
 
     }
