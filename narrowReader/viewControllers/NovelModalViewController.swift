@@ -1,21 +1,27 @@
 //
-//  NovelDetailViewController.swift
+//  NovelModalViewController.swift
 //  narrowReader
 //
-//  Created by kaeruko on 2018/07/18.
+//  Created by kaeruko on 2018/07/19.
 //  Copyright © 2018年 kaeruko. All rights reserved.
 //
 
 import UIKit
 
-class NovelDetailViewController: UIViewController {
 
-    var ncode : String = ""
+protocol NovelModalViewControllerDelegate {
+    func novelModalDidFinished(modaltext: String)
+}
+
+
+class NovelModalViewController: UIViewController {
+
+    var delegate: NovelModalViewControllerDelegate! = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
-
+        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {

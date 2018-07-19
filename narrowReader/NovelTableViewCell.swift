@@ -49,21 +49,26 @@ class NovelTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        //        self.title = self.createLabel()
+        self.title = self.createLabel()
         self.summary = self.createLabel()
-        //        self.title.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width * 0.9 , height: 0))
+        self.title.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width * 0.9 , height: 0))
         self.summary.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width*1.5, height: 0))
         self.summary.font = UIFont.systemFont(ofSize: 12)
-//                self.title.adjustsFontSizeToFitWidth = true
-                self.summary.adjustsFontSizeToFitWidth = true
-        //        self.title.numberOfLines = 0
-        //        self.summary.numberOfLines = 0
-        //        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 2)
-        //        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.leading, constant: 2)
+
+        self.title.adjustsFontSizeToFitWidth = true
+        self.summary.adjustsFontSizeToFitWidth = true
+        self.title.numberOfLines = 0
+        self.summary.numberOfLines = 0
+
+        self.title.translatesAutoresizingMaskIntoConstraints = false
+        self.summary.translatesAutoresizingMaskIntoConstraints = false
+
+        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 0)
+        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.leading, constant: 2)
         //        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.centerX, constant: 0)
         
-        //        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.top, constant: 30)
-//                self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.leading, constant: 2)
+        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.top, constant: 30)
+        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.leading, constant: 2)
         //        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.top, constant: 30)
         
     }
