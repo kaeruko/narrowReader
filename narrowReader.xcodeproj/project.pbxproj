@@ -32,6 +32,7 @@
 		447D3A2B20FB7A0A00AEEA31 /* narrowNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A2A20FB7A0A00AEEA31 /* narrowNavigationViewController.swift */; };
 		447D3A4620FF411500AEEA31 /* NovelDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A4520FF411500AEEA31 /* NovelDetailViewController.swift */; };
 		447D3A482100069500AEEA31 /* NovelModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A472100069500AEEA31 /* NovelModalViewController.swift */; };
+		447D3A4A210041A500AEEA31 /* tableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A49210041A500AEEA31 /* tableViewController.swift */; };
 		C7A17531990E263E1C4DC43F /* Pods_narrowReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A888C2AF04353E3CDF5161 /* Pods_narrowReader.framework */; };
 		F70A048E4852A55F3AA3A4B7 /* Pods_narrowReaderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B51EBCD5A4782E78617AC5 /* Pods_narrowReaderTests.framework */; };
 /* End PBXBuildFile section */
@@ -98,6 +99,7 @@
 		447D3A2A20FB7A0A00AEEA31 /* narrowNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = narrowNavigationViewController.swift; sourceTree = "<group>"; };
 		447D3A4520FF411500AEEA31 /* NovelDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelDetailViewController.swift; sourceTree = "<group>"; };
 		447D3A472100069500AEEA31 /* NovelModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelModalViewController.swift; sourceTree = "<group>"; };
+		447D3A49210041A500AEEA31 /* tableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tableViewController.swift; sourceTree = "<group>"; };
 		45A8173C2072C52ED59ABDF5 /* Pods-narrowReaderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-narrowReaderTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-narrowReaderTests/Pods-narrowReaderTests.release.xcconfig"; sourceTree = "<group>"; };
 		7A3AC521F8B3ED0A7086C00F /* Pods-narrowReader.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-narrowReader.release.xcconfig"; path = "Pods/Target Support Files/Pods-narrowReader/Pods-narrowReader.release.xcconfig"; sourceTree = "<group>"; };
 		8A4390EC065FA7D982A5B423 /* Pods-narrowReaderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-narrowReaderTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-narrowReaderTests/Pods-narrowReaderTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				447D3A2620FAE91300AEEA31 /* SearchResultViewController.swift */,
 				447D3A4520FF411500AEEA31 /* NovelDetailViewController.swift */,
 				447D3A472100069500AEEA31 /* NovelModalViewController.swift */,
+				447D3A49210041A500AEEA31 /* tableViewController.swift */,
 			);
 			path = viewControllers;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				44336C5220F6242E007F2C11 /* AppDelegate.swift in Sources */,
 				44412E7220F6E4AA001A6919 /* SearchPresentationController.swift in Sources */,
 				447D3A2720FAE91300AEEA31 /* SearchResultViewController.swift in Sources */,
+				447D3A4A210041A500AEEA31 /* tableViewController.swift in Sources */,
 				44412E7420F6E834001A6919 /* narrowPageViewController.swift in Sources */,
 				447D3A4620FF411500AEEA31 /* NovelDetailViewController.swift in Sources */,
 				44336C8120F6247C007F2C11 /* HomeViewController.swift in Sources */,

@@ -16,10 +16,11 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     var search_word:String?
     var novelcount : Int = 0
     var results:[Dictionary<String,Any?>]?=[]
-    
+    lazy var  novelDetailModal:NovelModalViewController = NovelModalViewController()
+
     func novelModalDidFinished(modaltext: String) {
         print(modaltext)
-        self.novelModal.dismiss(animated: true, completion: nil)
+        self.novelDetailModal.dismiss(animated: true, completion: nil)
         let secondVC = NovelDetailViewController()
         self.navigationController?.pushViewController(secondVC, animated: true)
     }
@@ -32,8 +33,6 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         self.searchByApi()
         print(self.search_word)
     }
-    
-    private var cellHeightList: [IndexPath: CGFloat] = [:]
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
@@ -53,9 +52,9 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(NovelTableViewCell.self), for: indexPath) as! NovelTableViewCell
+        cell.summary?.font = UIFont.systemFont(ofSize: 12)
         cell.summary?.adjustsFontSizeToFitWidth = true
         cell.summary?.numberOfLines = 0
-        cell.summary?.font = UIFont.systemFont(ofSize: 12)
 
         //        cell.summary?.minimumScaleFactor = 15.0/15.0; //つけると文字が読めるようになる
         cell.summary?.text = self.results?[indexPath.row]["story"] as? String
@@ -72,13 +71,29 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
 //        return "検索結果"
 //    }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(self.results![indexPath.row]["ncode"])
-        print(self.results![indexPath.row]["title"])
 
-        let next = NovelDetailViewController()
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let next = NovelModalViewController()
         next.ncode = self.results![indexPath.row]["ncode"] as! String
-        self.navigationController?.pushViewController(next, animated: true)
+        next.ntitle = self.results![indexPath.row]["title"] as! String
+        next.nstory = self.results![indexPath.row]["story"] as! String
+        present(next, animated: true, completion: nil)
+
+//        self.navigationController?.pushViewController(next, animated: true)
+
+
+//        print(self.results![indexPath.row]["ncode"])
+//        print(self.results![indexPath.row]["title"])
+//
+//
+//        self.novelDetailModal.modalPresentationStyle = .custom
+//        self.novelDetailModal.delegate = self as! NovelModalViewControllerDelegate
+//        self.novelDetailModal.ncode = self.results![indexPath.row]["ncode"] as! String
+//        self.novelDetailModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+//        present(self.novelDetailModal, animated: true, completion: nil)
+//        let next = NovelDetailViewController()
+//        next.ncode = self.results![indexPath.row]["ncode"] as! String
+//        self.navigationController?.pushViewController(next, animated: true)
 
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -88,7 +103,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         let file_name = "search.txt"
 
         if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
-            //print(dir)
+            print(dir)
             let path_file_name = dir.appendingPathComponent( file_name )
             do {
 
@@ -102,7 +117,8 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
                 for n in items {
                     let i = n as! Dictionary<String,Any?>
                     if((i["title"] == nil)){continue}
-                    self.results?.append(["title": i["title"], "ncode" : i["ncode"], "general_all_no":i["general_all_no"], "novel_type": i["novel_type"],"story": i["story"] ])
+print(i)
+                    self.results?.append(["title": i["title"], "ncode" : i["ncode"], "general_all_no":i["general_all_no"], "novel_type": i["novel_type"],"story": i["story"], "general_firstup":i["general_firstup"], "keyword":i["keyword"],  "writer":i["writer"], "general_lastup": i["general_lastup"] ])
 
                 }
                 self.novelcount = (self.results?.count)!
@@ -178,14 +194,18 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
 //        }
     }
     
-    lazy var  novelModal:NovelModalViewController = NovelModalViewController()
 
     @objc open func showNovelDetailModal(sender : UIButton) {
-        self.novelModal.modalPresentationStyle = .custom
-        self.novelModal.delegate = self as! NovelModalViewControllerDelegate
-        
-        self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-        present(self.searchModal, animated: true, completion: nil)
+
+//        let next = NovelDetailViewController()
+//        next.ncode = self.results![indexPath.row]["ncode"] as! String
+//        self.navigationController?.pushViewController(next, animated: true)
+
+//        self.novelDetailModal.modalPresentationStyle = .custom
+//        self.novelDetailModal.delegate = self as! NovelModalViewControllerDelegate
+//
+//        self.novelDetailModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+//        present(self.novelDetailModal, animated: true, completion: nil)
     }
 
     

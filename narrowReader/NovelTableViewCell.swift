@@ -51,6 +51,7 @@ class NovelTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.title = self.createLabel()
         self.summary = self.createLabel()
+        self.summary?.minimumScaleFactor = 15.0/15.0; //つけると文字が読めるようになる
         self.title.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width * 0.9 , height: 0))
         self.summary.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width*1.5, height: 0))
         self.summary.font = UIFont.systemFont(ofSize: 12)
@@ -63,12 +64,12 @@ class NovelTableViewCell: UITableViewCell {
         self.title.translatesAutoresizingMaskIntoConstraints = false
         self.summary.translatesAutoresizingMaskIntoConstraints = false
 
-        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 0)
-        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.leading, constant: 2)
+//        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 0)
+//        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.leading, constant: 2)
         //        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.centerX, constant: 0)
         
-        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.top, constant: 30)
-        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.leading, constant: 2)
+//        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.top, constant: 30)
+//        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.leading, constant: 2)
         //        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.top, constant: 30)
         
     }

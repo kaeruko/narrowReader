@@ -8,13 +8,51 @@
 
 import UIKit
 
-class NovelDetailViewController: UIViewController {
+class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate {
 
     var ncode : String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let file_name = "textdl.txt"
+        
+        if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
+            print(dir)
+            let path_file_name = dir.appendingPathComponent( file_name )
+            do {
+                
+                let searchresult: String = try String( contentsOf: path_file_name, encoding: String.Encoding.utf8 )
+                print(searchresult)
+                var sr: Data =  searchresult.data(using: String.Encoding.utf8)!
+                
+                let scrollView = UIScrollView()
+                scrollView.backgroundColor = UIColor.white
+                
+                // 表示窓のサイズと位置を設定
+                scrollView.frame.size = CGSize(width: self.frameWidth * 0.9 , height: self.frameHeight * 0.7 )
+                scrollView.center = self.view.center
+//                scrollView.contentSize = CGSize(width: self.frameWidth * 0.9, height: self.frameHeight * 3)
+                // スクロールの跳ね返り
+//                scrollView.bounces = false
+                
+                // スクロールバーの見た目と余白
+//                scrollView.indicatorStyle = .white
+//                scrollView.scrollIndicatorInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+                
+                let label = UITextView()
+                label.text = searchresult
+                label.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 0.9, height: self.frameHeight * 0.7)
 
+                scrollView.addSubview(label)
+                // Delegate を設定
+                scrollView.delegate = self as! UIScrollViewDelegate
+                self.view.addSubview(scrollView)
+                
+                
+            } catch {
+                //エラー処理
+            }
+        }
 
     }
 
