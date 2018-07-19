@@ -77,9 +77,8 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         next.ncode = self.results![indexPath.row]["ncode"] as! String
         next.ntitle = self.results![indexPath.row]["title"] as! String
         next.nstory = self.results![indexPath.row]["story"] as! String
-        present(next, animated: true, completion: nil)
-
-//        self.navigationController?.pushViewController(next, animated: true)
+//        present(next, animated: true, completion: nil)
+        self.navigationController?.pushViewController(next, animated: true)
 
 
 //        print(self.results![indexPath.row]["ncode"])

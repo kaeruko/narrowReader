@@ -19,6 +19,7 @@ class SearchPresentationController: UIPresentationController {
 
     
     override func presentationTransitionWillBegin() {
+print("presentationTransitionWillBegin")
         let containerView = self.containerView!
         
         self.overlay = UIView(frame: containerView.bounds)
