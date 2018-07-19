@@ -48,7 +48,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         return self.novelcount
     }
 
-    
+
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(NovelTableViewCell.self), for: indexPath) as! NovelTableViewCell
