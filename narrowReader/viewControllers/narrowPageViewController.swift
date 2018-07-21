@@ -1,3 +1,27 @@
+class novelDetai{
+    var ncode : String = ""
+    var writer : String = ""
+    var global_point : Int = 0
+    var keyword : String = ""
+    var genre : Int = 0
+    var title : String = ""
+    var userid : Int = 0
+    var fav_novel_cnt : Int = 0
+    var all_point : Int = 0
+    var end : Int = 0
+    var all_hyoka_cnt : Int = 0
+    var review_cnt : Int = 0
+    var general_all_no : Int = 0
+    var novelupdated_at : Date = Date()
+    var general_lastup : Date = Date()
+    var general_firstup : Date = Date()
+    var novel_type : Int = 0
+    var biggenre : Int = 0
+    var length : Int = 0
+    var story : String = ""
+}
+
+
 //
 //  BaseViewController
 //  narrowReader

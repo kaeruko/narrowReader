@@ -10,21 +10,12 @@ import UIKit
 import Alamofire
 import RealmSwift
 
-class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource, NovelModalViewControllerDelegate {
+class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource {
     
     var nnumber:Int?
     var search_word:String?
     var novelcount : Int = 0
     var results:[Dictionary<String,Any?>]?=[]
-    lazy var  novelDetailModal:NovelModalViewController = NovelModalViewController()
-
-    func novelModalDidFinished(modaltext: String) {
-        print(modaltext)
-        self.novelDetailModal.dismiss(animated: true, completion: nil)
-        let secondVC = NovelDetailViewController()
-        self.navigationController?.pushViewController(secondVC, animated: true)
-    }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,9 +47,8 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         cell.summary?.adjustsFontSizeToFitWidth = true
         cell.summary?.numberOfLines = 0
 
-        //        cell.summary?.minimumScaleFactor = 15.0/15.0; //つけると文字が読めるようになる
-        cell.summary?.text = self.results?[indexPath.row]["story"] as? String
-        cell.title?.text = self.results?[indexPath.row]["title"] as? String
+        cell.summary?.text = self.resultRow[indexPath.row].story as? String
+        cell.title?.text = self.resultRow[indexPath.row].title as? String
         cell.layoutIfNeeded()
         return cell
     }
@@ -67,36 +57,16 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         return 1
     }
     
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "検索結果"
-//    }
-    
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let next = NovelModalViewController()
-        next.ncode = self.results![indexPath.row]["ncode"] as! String
-        next.ntitle = self.results![indexPath.row]["title"] as! String
-        next.nstory = self.results![indexPath.row]["story"] as! String
-//        present(next, animated: true, completion: nil)
+        let next = NovelDetailViewController()
+        next.ndetail = self.resultRow[indexPath.row]
         self.navigationController?.pushViewController(next, animated: true)
-
-
-//        print(self.results![indexPath.row]["ncode"])
-//        print(self.results![indexPath.row]["title"])
-//
-//
-//        self.novelDetailModal.modalPresentationStyle = .custom
-//        self.novelDetailModal.delegate = self as! NovelModalViewControllerDelegate
-//        self.novelDetailModal.ncode = self.results![indexPath.row]["ncode"] as! String
-//        self.novelDetailModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-//        present(self.novelDetailModal, animated: true, completion: nil)
-//        let next = NovelDetailViewController()
-//        next.ncode = self.results![indexPath.row]["ncode"] as! String
-//        self.navigationController?.pushViewController(next, animated: true)
-
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    var resultRow : [novelDetai] = []
+
     open func searchByApi() {
         
         let file_name = "search.txt"
@@ -117,37 +87,56 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
                     let i = n as! Dictionary<String,Any?>
                     if((i["title"] == nil)){continue}
 print(i)
+
+                    var ndetail : novelDetai = novelDetai()
+                    ndetail.ncode = i["ncode"] as! String
+                    ndetail.writer = i["writer"] as! String
+                    ndetail.global_point = i["global_point"] as! Int
+                    ndetail.keyword = i["keyword"] as! String
+                    ndetail.genre = i["genre"] as! Int
+                    ndetail.title = i["title"] as! String
+                    ndetail.userid = i["userid"] as! Int
+                    ndetail.fav_novel_cnt = i["fav_novel_cnt"] as! Int
+                    ndetail.all_point = i["all_point"] as! Int
+                    ndetail.end = i["end"] as! Int
+                    ndetail.all_hyoka_cnt = i["all_hyoka_cnt"] as! Int
+                    ndetail.review_cnt = i["review_cnt"] as! Int
+                    ndetail.general_all_no = i["general_all_no"] as! Int
+//                    ndetail.novelupdated_at = i["novelupdated_at"] as! Date
+//                    ndetail.general_lastup = i["general_lastup"] as! Date
+//                    ndetail.general_firstup = i["general_firstup"] as! Date
+                    ndetail.novel_type = i["novel_type"] as! Int
+                    ndetail.biggenre = i["biggenre"] as! Int
+                    ndetail.length = i["length"] as! Int as! Int
+                    ndetail.story = i["story"] as! String
+                    self.resultRow.append(ndetail)
                     self.results?.append(["title": i["title"], "ncode" : i["ncode"], "general_all_no":i["general_all_no"], "novel_type": i["novel_type"],"story": i["story"], "general_firstup":i["general_firstup"], "keyword":i["keyword"],  "writer":i["writer"], "general_lastup": i["general_lastup"] ])
 
                 }
-                self.novelcount = (self.results?.count)!
-
+                self.novelcount = (self.resultRow.count)
+                
                 let myTableView = UITableView(frame: self.view.frame, style: .plain)
-//                myTableView.estimatedRowHeight = 600
-//                myTableView.rowHeight = 300
                 myTableView.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.view.frame.width*1.5, height: 0))
                 myTableView.flashScrollIndicators()
 
+                myTableView.tableFooterView = UIView()
                 myTableView.delegate      =   self as UITableViewDelegate
                 myTableView.dataSource    =   self as! UITableViewDataSource
                 myTableView.register(NovelTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(NovelTableViewCell.self))
                 self.view.addSubview(myTableView)
                 myTableView.translatesAutoresizingMaskIntoConstraints = false
-
+                NSLayoutConstraint.activate([
+                    myTableView.topAnchor.constraint(equalTo: view.topAnchor),
+                    myTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                    myTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                    myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                    ])
 
             } catch {
                 //エラー処理
             }
         }
         
-        for n in self.results! {
-            let i = n as! Dictionary<String,Any?>
-            //            print(i)
-            //            print(i["title"])
-//            print(i["story"])
-        }
-        
-
 //
 //        //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
 //        //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
@@ -192,22 +181,5 @@ print(i)
 //            }
 //        }
     }
-    
 
-    @objc open func showNovelDetailModal(sender : UIButton) {
-
-//        let next = NovelDetailViewController()
-//        next.ncode = self.results![indexPath.row]["ncode"] as! String
-//        self.navigationController?.pushViewController(next, animated: true)
-
-//        self.novelDetailModal.modalPresentationStyle = .custom
-//        self.novelDetailModal.delegate = self as! NovelModalViewControllerDelegate
-//
-//        self.novelDetailModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-//        present(self.novelDetailModal, animated: true, completion: nil)
-    }
-
-    
-    
-    
 }

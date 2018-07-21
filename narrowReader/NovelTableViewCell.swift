@@ -64,14 +64,21 @@ class NovelTableViewCell: UITableViewCell {
         self.title.translatesAutoresizingMaskIntoConstraints = false
         self.summary.translatesAutoresizingMaskIntoConstraints = false
 
-//        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.top, constant: 0)
-//        self.layoutElement(target: self, element: self.title, attr: NSLayoutAttribute.leading, constant: 2)
-        //        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.centerX, constant: 0)
+
         
-//        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.top, constant: 30)
-//        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.leading, constant: 2)
-        //        self.layoutElement(target: self, element: self.summary, attr: NSLayoutAttribute.top, constant: 30)
+        NSLayoutConstraint.activate([
+            self.title.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            self.title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
+            self.title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+        ])
         
+        NSLayoutConstraint.activate([
+            self.summary.topAnchor.constraint(equalTo: topAnchor, constant: 50),
+            self.summary.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
+            self.summary.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+            self.summary.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+        ])
+
     }
     
     required init?(coder aDecoder: NSCoder) {
