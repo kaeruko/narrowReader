@@ -18,7 +18,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
 
 
         self.setScroll()
-        self.getNovelText()
+        self.getNovel()
 
 
 
@@ -44,6 +44,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         }
 
     }
+
     var scrollView : UIScrollView = UIScrollView()
     var textLabel : UITextView = UITextView()
     
@@ -60,12 +61,53 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         self.scrollView.delegate = self as! UIScrollViewDelegate
     }
 
-    func getNovelText(){
-        //何ページあるか
-print(ndetail.title)
-print(ndetail.general_all_no)
-        print(ndetail.ncode)
+    func getNovelNumber(){
+        var url : String = "https://ncode.syosetu.com/"
+        url.append((ndetail.ncode as NSString).lowercased)
+        url.append("/")
+        Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
+            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                var ans: [String] = []
+                utf8Text.pregMatche(pattern: "ncode/(\\d+)/", matches: &ans)
+                print(ans[1])
+                do {
+                    
+                    self.getNovelText(nnumber: Int(ans[1])!, no: 1)
+                } catch {
+                    print(error)
+                }
+            }
+        }
 
+    }
+
+    func getNovelText(nnumber : Int , no : Int = 0){
+        var url : String = "https://novel18.syosetu.com/txtdownload/dlstart/ncode/"
+        url.append(String(nnumber ))
+        url.append("/?no=")
+        url.append(String(no))
+        url.append("&hankaku=0&code=utf-8&kaigyo=crlf")
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
+                if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                    do {
+                        
+                        self.getNovelText(nnumber : nnumber, no : no+1)
+                    } catch {
+                        print(error)
+                    }
+                }
+            }
+            
+
+        }
+
+    }
+    
+    func getNovel(){
+        //何ページあるか
+        self.getNovelNumber()
         //nnumber取得
         
 
@@ -73,23 +115,6 @@ print(ndetail.general_all_no)
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
         //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&nocgenre=3&word=%E7%9B%A3%E7%A6%81
-        var url : String = "https://ncode.syosetu.com/"
-        url.append(ndetail.ncode)
-        Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in      //連載
-
-
-            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-
-                let regex = try! NSRegularExpression(pattern: "S(w+)ift", options: [])
-                var searchresult: Data =  utf8Text.data(using: String.Encoding.utf8)!
-                do {
-                    // パースする
-                    let items:NSArray = try JSONSerialization.jsonObject(with: searchresult, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
-                } catch {
-                    print(error)
-                }
-            }
-        }
 
         print(self.ndetail.title)
         
