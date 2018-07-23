@@ -56,6 +56,8 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         self.scrollView.center = self.view.center
         self.textLabel.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: self.frameHeight * 1.0)
         self.textLabel.text = "お待ち下さい"
+        self.textLabel.font = UIFont.systemFont(ofSize: 30)
+
         self.scrollView.addSubview(self.textLabel)
         // Delegate を設定
         self.scrollView.delegate = self as! UIScrollViewDelegate
@@ -76,7 +78,6 @@ print(utf8Text)
                     self.textLabel.text = "本文取得準備中"
                     self.getNovelText(nnumber: Int(ans[1])!, no: 1)
                 } catch {
-print("失敗")
                     print(error)
                 }
             }
@@ -109,6 +110,7 @@ print(self.noveltext)
 print("self.ndetail.general_all_no")
 print(String(self.ndetail.general_all_no)+" : "+String(no))
                         if(no >= self.ndetail.general_all_no){
+                            self.textLabel.font = UIFont.systemFont(ofSize: 12)
                             self.textLabel.text = self.noveltext
                             return
                         }

@@ -7,15 +7,26 @@
 //
 
 protocol SearchModalViewControllerDelegate {
-    func modalDidFinished(modaltext: String)
+    func modalDidFinished(condition: searchCondition)
 }
 
+class searchCondition{
+
+    var searchWord : String = ""
+    var ignoreWord : String = ""
+    var chkTitleName : Bool = true
+    var chkPlotName : Bool = true
+    var chkKeywordName : Bool = true
+    var chkAutherName : Bool = true
+    var order : Int = 0
+    var genre : Int = 0
+}
 
 import UIKit
 import Alamofire
 import RealmSwift
 
-class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, UIPickerViewDelegate,UIToolbarDelegate, UIPickerViewDataSource, UITextInputDelegate {
+class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, UIPickerViewDelegate,UIToolbarDelegate, UIPickerViewDataSource {
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return SearchPresentationController(presentedViewController: presented, presenting: presenting)
@@ -25,20 +36,21 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         print("textFieldDidBeginEditing:" + textField.text!)
     }
     
-    var search_word : String = ""
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // キーボードを隠す
-        
-        textField.resignFirstResponder()
+
         print("textFieldShouldReturn:" + textField.text!)
-        print(textField.tag)
-        self.search_word = textField.text!
+        if(textField.tag == 1){
+            self.scondition.searchWord = textField.text!
+        }else if(textField.tag == 2){
+            self.scondition.ignoreWord = textField.text!
+        }
+        textField.resignFirstResponder()
         //検索
         return true
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        print("Start" + textField.text!)
+        print("textFieldShouldBeginEditing" + textField.text!)
         print(textField)
         return true
     }
@@ -56,24 +68,10 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         return true
     }
     
-    
-    func selectionWillChange(_ textInput: UITextInput?) {
-    }
-    
-    func selectionDidChange(_ textInput: UITextInput?) {
-    }
-    
-    func textWillChange(_ textInput: UITextInput?) {
-    }
-    
-    func textDidChange(_ textInput: UITextInput?) {
-        
-    }
-    
     var delegate: SearchModalViewControllerDelegate! = nil
     
     var ntypes: NSArray = ["新着順","ブクマ順","レビュー順","評価順","評価者順","文字数順","新しい順"]
-    var nocgenres: NSArray = ["すべて","女性向け", "BL"]
+    var nocgenres: NSArray = ["すべて","男性向け", "女性向け"]
     
     
     //一段目
@@ -115,6 +113,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     lazy var ngenreValueLabel : UILabel = self.createLabel()
     
     lazy var submitButton : UIButton = self.createButton()
+    var scondition : searchCondition = searchCondition()
     
     open func createUIView(uiview : UIView) -> UIView{
         uiview.translatesAutoresizingMaskIntoConstraints = false
@@ -134,7 +133,6 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         btn = self.createUIView(uiview: btn) as! UIButton
         return btn
     }
-    
     
     open func createSwitch() -> UISwitch{
         var swt = UISwitch(frame:CGRect(x: 0, y: 0, width: 0 , height: 0))
@@ -160,7 +158,6 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         textfield.backgroundColor = UIColor.white
         textfield.adjustsFontSizeToFitWidth = true
         textfield.delegate = self as! UITextFieldDelegate
-        textfield.inputDelegate = self as! UITextInputDelegate
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.returnKeyType = .done
         return textfield
@@ -265,24 +262,22 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         
         
         //スロット
-        
-        self.ntypeValueLabel.text = "並び順"
-        self.layoutElement(target: self.view, element: self.ntypeValueLabel, attr: NSLayoutAttribute.bottom, constant: (topmargin + (marginatline * 2.0)) * -1  )
-        self.layoutElement(target: self.view, element: self.ntypeValueLabel, attr: NSLayoutAttribute.leading, constant:modalWidth * 0.2)
-        
-        self.ngenreValueLabel.text = "ジャンル"
-        self.layoutElement(target: self.view, element: self.ngenreValueLabel, attr: NSLayoutAttribute.bottom, constant: (topmargin + (marginatline * 2.0)) * -1  )
-        self.layoutElement(target: self.view, element: self.ngenreValueLabel, attr: NSLayoutAttribute.trailing, constant:modalWidth * -0.2)
-        
-        
-        
-        self.ntypeTitleLabel.text = ntypes[0] as! String
-        self.layoutElement(target: self.view, element: self.ntypeTitleLabel, attr: NSLayoutAttribute.bottom, constant:  (topmargin + (marginatline * 1.2)) * -1  )
+        self.ntypeTitleLabel.text = "並び順"
+        self.layoutElement(target: self.view, element: self.ntypeTitleLabel, attr: NSLayoutAttribute.bottom, constant:  (topmargin + (marginatline * 2.0)) * -1  )
         self.layoutElement(target: self.view, element: self.ntypeTitleLabel, attr: NSLayoutAttribute.leading, constant:modalWidth * 0.2)
         
-        self.ngenreTitleLabel.text = nocgenres[0] as! String
-        self.layoutElement(target: self.view, element: self.ngenreTitleLabel, attr: NSLayoutAttribute.bottom, constant: (topmargin + (marginatline * 1.2)) * -1  )
+        self.ngenreTitleLabel.text = "種別"
+        self.layoutElement(target: self.view, element: self.ngenreTitleLabel, attr: NSLayoutAttribute.bottom, constant: (topmargin + (marginatline * 2.0)) * -1  )
         self.layoutElement(target: self.view, element: self.ngenreTitleLabel, attr: NSLayoutAttribute.trailing, constant:modalWidth * -0.2)
+
+        self.ntypeValueLabel.text = self.ntypes[0] as! String
+        self.layoutElement(target: self.view, element: self.ntypeValueLabel, attr: NSLayoutAttribute.bottom, constant: (topmargin + (marginatline * 1.2)) * -1  )
+        self.layoutElement(target: self.view, element: self.ntypeValueLabel, attr: NSLayoutAttribute.leading, constant:modalWidth * 0.2)
+        
+        self.ngenreValueLabel.text = self.nocgenres[0] as! String
+        self.layoutElement(target: self.view, element: self.ngenreValueLabel, attr: NSLayoutAttribute.bottom, constant: (topmargin + (marginatline * 1.2)) * -1  )
+        self.layoutElement(target: self.view, element: self.ngenreValueLabel, attr: NSLayoutAttribute.trailing, constant:modalWidth * -0.2)
+        
         
         
         myToolBar = UIToolbar(frame: CGRect(x:0, y: self.view.frame.size.height/6, width:self.view.frame.size.width, height: 40.0))
@@ -313,6 +308,21 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     
     
     @objc func setSwitch(sender:UISwitch) {
+        switch sender.tag {
+            case 1: break
+                self.scondition.chkTitleName = sender.isOn
+            case 2:
+                self.scondition.chkPlotName = sender.isOn
+
+            case 3:
+                self.scondition.chkKeywordName = sender.isOn
+
+            case 4:
+                self.scondition.chkAutherName = sender.isOn
+
+            default: break
+        }
+
         print(sender.tag)
         print(sender.isOn)
     }
@@ -356,16 +366,15 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if (component == 0){
             self.selected["ntype"] = ntypes[row] as? String
-            print(self.selected["ntype"])
             self.genreTextField.text = ntypes[row] as? String
-            
+            self.scondition.genre = row
         }else if (component == 1){
             self.selected["nocgenre"] = nocgenres[row] as? String
-            print(self.selected["nocgenre"])
             self.genreTextField.text = self.selected["ntype"]
             self.genreTextField.text?.append(" ジャンル：")
             self.genreTextField.text?.append(self.selected["nocgenre"]!)
-            
+            self.scondition.order = row
+
         }
     }
     
@@ -373,7 +382,15 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     lazy var  searchResult:SearchResultViewController = SearchResultViewController()
     
     @objc open func doSubmit(sender : UIButton) {
-        self.delegate?.modalDidFinished(modaltext: "戻ったよ")
+
+        print(self.scondition.searchWord)
+        print(self.scondition.ignoreWord)
+        print(self.scondition.chkAutherName)
+        print(self.scondition.genre)
+        print(self.scondition.order)
+        print(self.scondition)
+
+        self.delegate?.modalDidFinished(condition: self.scondition)
     }
     
     

@@ -12,6 +12,7 @@ import RealmSwift
 
 class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource {
     
+    var condition : searchCondition = searchCondition()
     var nnumber:Int?
     var search_word:String?
     var novelcount : Int = 0
@@ -19,8 +20,10 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(self.condition.ignoreWord)
         self.title = "検索結果"
         self.view.backgroundColor = UIColor.white
+        self.setTable()
         self.searchByApi()
         print(self.search_word)
     }
@@ -46,7 +49,8 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         cell.summary?.font = UIFont.systemFont(ofSize: 12)
         cell.summary?.adjustsFontSizeToFitWidth = true
         cell.summary?.numberOfLines = 0
-
+        print("cellForRowAt")
+print(self.resultRow[indexPath.row].title as? String)
         cell.summary?.text = self.resultRow[indexPath.row].story as? String
         cell.title?.text = self.resultRow[indexPath.row].title as? String
         cell.layoutIfNeeded()
@@ -65,9 +69,85 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    var resultRow : [novelDetai] = []
+    var TableView : UITableView = UITableView()
+    open func setTable() {
+        self.TableView.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frameWidth*1.5, height: 0))
+        self.TableView.flashScrollIndicators()
+        
+        self.TableView.tableFooterView = UIView()
+        self.TableView.delegate      =   self as UITableViewDelegate
+        self.TableView.dataSource    =   self as! UITableViewDataSource
+        self.TableView.register(NovelTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(NovelTableViewCell.self))
+        self.view.addSubview(self.TableView)
+        self.TableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.TableView.topAnchor.constraint(equalTo: view.topAnchor),
+            self.TableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.TableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.TableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
 
+    }
+    
+    
+    var resultRow : [novelDetai] = []
     open func searchByApi() {
+
+        //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
+        //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
+        Alamofire.request("https://api.syosetu.com/novel18api/api/?libtype=1&out=json&nocgenre=3&word=%E7%9B%A3%E7%A6%81", headers:["Cookie": "over18=yes;"]).response { response in      //連載
+
+
+            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+
+                let regex = try! NSRegularExpression(pattern: "S(w+)ift", options: [])
+                var searchresult: Data =  utf8Text.data(using: String.Encoding.utf8)!
+                do {
+                    // パースする
+                    let items:NSArray = try JSONSerialization.jsonObject(with: searchresult, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+
+                    for n in items {
+                        let i = n as! Dictionary<String,Any?>
+                        print(i)
+
+                        if((i["title"] == nil)){continue}
+                        var ndetail : novelDetai = novelDetai()
+                        ndetail.ncode = i["ncode"] as! String
+                        ndetail.writer = i["writer"] as! String
+                        ndetail.global_point = i["global_point"] as! Int
+                        ndetail.keyword = i["keyword"] as! String
+                        ndetail.genre = i["nocgenre"] as! Int
+                        ndetail.title = i["title"] as! String
+                        ndetail.fav_novel_cnt = i["fav_novel_cnt"] as! Int
+                        ndetail.all_point = i["all_point"] as! Int
+                        ndetail.end = i["end"] as! Int
+                        ndetail.all_hyoka_cnt = i["all_hyoka_cnt"] as! Int
+                        ndetail.review_cnt = i["review_cnt"] as! Int
+                        ndetail.general_all_no = i["general_all_no"] as! Int
+                        //                    ndetail.novelupdated_at = i["novelupdated_at"] as! Date
+                        //                    ndetail.general_lastup = i["general_lastup"] as! Date
+                        //                    ndetail.general_firstup = i["general_firstup"] as! Date
+                        ndetail.novel_type = i["novel_type"] as! Int
+                        ndetail.length = i["length"] as! Int as! Int
+                        ndetail.story = i["story"] as! String
+                        self.resultRow.append(ndetail)
+                    }
+                    self.novelcount = (self.resultRow.count)
+print("self.resultRow.count???")
+print(self.resultRow.count)
+                } catch {
+                    print(error)
+                }
+            }
+        }
+
+
+
+    }
+    
+    
+    
+    open func searchByFile() {
         
         let file_name = "search.txt"
 
@@ -115,71 +195,12 @@ print(i)
                 }
                 self.novelcount = (self.resultRow.count)
                 
-                let myTableView = UITableView(frame: self.view.frame, style: .plain)
-                myTableView.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.view.frame.width*1.5, height: 0))
-                myTableView.flashScrollIndicators()
-
-                myTableView.tableFooterView = UIView()
-                myTableView.delegate      =   self as UITableViewDelegate
-                myTableView.dataSource    =   self as! UITableViewDataSource
-                myTableView.register(NovelTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(NovelTableViewCell.self))
-                self.view.addSubview(myTableView)
-                myTableView.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    myTableView.topAnchor.constraint(equalTo: view.topAnchor),
-                    myTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                    myTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                    myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                    ])
 
             } catch {
                 //エラー処理
             }
         }
         
-//
-//        //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
-//        //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
-//        Alamofire.request("https://api.syosetu.com/novel18api/api/?libtype=1&out=json&nocgenre=3&word=%E7%9B%A3%E7%A6%81", headers:["Cookie": "over18=yes;"]).response { response in      //連載
-//
-//
-//            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-//
-//                let regex = try! NSRegularExpression(pattern: "S(w+)ift", options: [])
-//                var searchresult: Data =  utf8Text.data(using: String.Encoding.utf8)!
-//                do {
-//                    // パースする
-//                    let items:NSArray = try JSONSerialization.jsonObject(with: searchresult, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
-//
-//                    for n in items {
-//                        let i = n as! Dictionary<String,Any?>
-////                        print(i["story"])
-//
-//                        if((i["title"] == nil)){continue}
-//                        self.results?.append(["title": i["title"], "ncode" : i["ncode"], "general_all_no":i["general_all_no"], "novel_type": i["novel_type"],"story": i["story"] ])
-//
-//                    }
-//                    self.novelcount = (self.results?.count)!
-//
-//
-//                    let myTableView = UITableView(frame: self.view.frame, style: .plain)
-//                    myTableView.estimatedRowHeight = UITableViewAutomaticDimension
-//                    myTableView.rowHeight = UITableViewAutomaticDimension
-//                    myTableView.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.view.frame.width*1.5, height: 0))
-//                    myTableView.flashScrollIndicators()
-//                    myTableView.delegate      =   self as UITableViewDelegate
-//                    myTableView.dataSource    =   self as! UITableViewDataSource
-//                    myTableView.register(NovelTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(NovelTableViewCell.self))
-//                    self.view.addSubview(myTableView)
-//                    myTableView.translatesAutoresizingMaskIntoConstraints = false
-////                    self.layoutElement(target: self.view, element: myTableView, attr: NSLayoutAttribute.top, constant: 1)
-////                    self.layoutElement(target: self.view, element: myTableView, attr: NSLayoutAttribute.trailing, constant: -1)
-//
-//                } catch {
-//                    print(error)
-//                }
-//            }
-//        }
     }
 
 }

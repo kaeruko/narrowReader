@@ -46,11 +46,11 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
     lazy var  searchModal:SearchModalViewController = SearchModalViewController()
 
 
-    func modalDidFinished(modaltext: String) {
-        print(modaltext)
+    func modalDidFinished(condition: searchCondition) {
         self.searchModal.dismiss(animated: true, completion: nil)
-        let secondVC = SearchResultViewController()
-        self.navigationController?.pushViewController(secondVC, animated: true)
+        let result = SearchResultViewController()
+        result.condition = condition
+        self.navigationController?.pushViewController(result, animated: true)
     }
 
     func setRect() {
