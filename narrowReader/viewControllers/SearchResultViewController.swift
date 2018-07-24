@@ -49,7 +49,9 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         cell.summary?.numberOfLines = 0
         cell.summary?.text = self.resultRow[indexPath.row].story as? String
         cell.title?.text = self.resultRow[indexPath.row].title as? String
+        cell.length?.text = self.resultRow[indexPath.row].length as? String
         cell.layoutIfNeeded()
+        
         return cell
     }
     
@@ -70,7 +72,6 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     open func setTable() {
 
         self.TableView.flashScrollIndicators()
-        
         self.TableView.tableFooterView = UIView()
         self.TableView.delegate      =   self as UITableViewDelegate
         self.TableView.dataSource    =   self as! UITableViewDataSource
@@ -89,9 +90,9 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     var resultRow : [novelDetai] = []
     open func searchByApi() {
-        var url : String = "https://api.syosetu.com/novel18api/api/?lim=5&libtype=1&out=json&nocgenre=3&word="
+        var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=20&lim=5&libtype=1&out=json&nocgenre=3&word="
         url.append(self.condition.searchWord.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
-        url.append("&notword="+self.condition.ignoreWord)
+        url.append("&notword="+self.condition.notword)
         
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
         //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf

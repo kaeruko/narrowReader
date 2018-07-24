@@ -13,7 +13,7 @@ protocol SearchModalViewControllerDelegate {
 class searchCondition{
 
     var searchWord : String = ""
-    var ignoreWord : String = ""
+    var notword : String = ""
     var chkTitleName : Bool = true
     var chkPlotName : Bool = true
     var chkKeywordName : Bool = true
@@ -42,7 +42,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         if(textField.tag == 1){
             self.scondition.searchWord = textField.text!
         }else if(textField.tag == 2){
-            self.scondition.ignoreWord = textField.text!
+            self.scondition.notword = textField.text!
         }
         textField.resignFirstResponder()
         //検索
@@ -384,7 +384,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     @objc open func doSubmit(sender : UIButton) {
 
         print(self.scondition.searchWord)
-        print(self.scondition.ignoreWord)
+        print(self.scondition.notword)
         print(self.scondition.chkAutherName)
         print(self.scondition.genre)
         print(self.scondition.order)

@@ -11,8 +11,8 @@ import UIKit
 class NovelTableViewCell: UITableViewCell {
     
     var title: UILabel!
-    
     var summary: UILabel!
+    var length: UILabel!
     
     open func createUIView(uiview : UIView) -> UIView{
         uiview.translatesAutoresizingMaskIntoConstraints = false
@@ -51,19 +51,24 @@ class NovelTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.title = self.createLabel()
         self.summary = self.createLabel()
-        self.summary?.minimumScaleFactor = 15.0/15.0; //つけると文字が読めるようになる
+        self.length = self.createLabel()
+
+        self.summary?.minimumScaleFactor = 15.0/15.0;
         self.title.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width * 0.9 , height: 0))
         self.summary.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width*1.5, height: 0))
+        self.length.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width*1.5, height: 0))
         self.summary.font = UIFont.systemFont(ofSize: 12)
 
         self.title.adjustsFontSizeToFitWidth = true
         self.summary.adjustsFontSizeToFitWidth = true
+        self.length.adjustsFontSizeToFitWidth = true
+
         self.title.numberOfLines = 0
         self.summary.numberOfLines = 0
 
         self.title.translatesAutoresizingMaskIntoConstraints = false
         self.summary.translatesAutoresizingMaskIntoConstraints = false
-
+        self.length.translatesAutoresizingMaskIntoConstraints = false
 
         
         NSLayoutConstraint.activate([
@@ -73,7 +78,14 @@ class NovelTableViewCell: UITableViewCell {
         ])
         
         NSLayoutConstraint.activate([
-            self.summary.topAnchor.constraint(equalTo: topAnchor, constant: 50),
+            self.length.topAnchor.constraint(equalTo: topAnchor, constant: 50),
+            self.length.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
+            self.length.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+            self.length.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+        ])
+
+        NSLayoutConstraint.activate([
+            self.summary.topAnchor.constraint(equalTo: topAnchor, constant: self.frame.height * 1.0),
             self.summary.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             self.summary.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             self.summary.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),

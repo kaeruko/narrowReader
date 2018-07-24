@@ -16,7 +16,7 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "小説家にnarrow"
+        self.title = "narrow-reader"
         self.view.backgroundColor = UIColor.white
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
     }
