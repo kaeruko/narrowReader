@@ -23,9 +23,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         print(self.condition.ignoreWord)
         self.title = "検索結果"
         self.view.backgroundColor = UIColor.white
-        self.setTable()
         self.searchByApi()
-        print(self.search_word)
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -40,6 +38,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.novelcount
+
     }
 
 
@@ -49,8 +48,6 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         cell.summary?.font = UIFont.systemFont(ofSize: 12)
         cell.summary?.adjustsFontSizeToFitWidth = true
         cell.summary?.numberOfLines = 0
-        print("cellForRowAt")
-print(self.resultRow[indexPath.row].title as? String)
         cell.summary?.text = self.resultRow[indexPath.row].story as? String
         cell.title?.text = self.resultRow[indexPath.row].title as? String
         cell.layoutIfNeeded()
@@ -70,8 +67,9 @@ print(self.resultRow[indexPath.row].title as? String)
     }
     
     var TableView : UITableView = UITableView()
+
     open func setTable() {
-        self.TableView.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frameWidth*1.5, height: 0))
+
         self.TableView.flashScrollIndicators()
         
         self.TableView.tableFooterView = UIView()
@@ -108,7 +106,6 @@ print(self.resultRow[indexPath.row].title as? String)
 
                     for n in items {
                         let i = n as! Dictionary<String,Any?>
-                        print(i)
 
                         if((i["title"] == nil)){continue}
                         var ndetail : novelDetai = novelDetai()
@@ -131,10 +128,9 @@ print(self.resultRow[indexPath.row].title as? String)
                         ndetail.length = i["length"] as! Int as! Int
                         ndetail.story = i["story"] as! String
                         self.resultRow.append(ndetail)
+                        self.setTable()
                     }
                     self.novelcount = (self.resultRow.count)
-print("self.resultRow.count???")
-print(self.resultRow.count)
                 } catch {
                     print(error)
                 }
