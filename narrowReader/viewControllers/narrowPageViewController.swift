@@ -1,3 +1,7 @@
+import UIKit
+import Alamofire
+import RealmSwift
+
 class novelDetai{
     var ncode : String = ""
     var writer : String = ""
@@ -22,6 +26,36 @@ class novelDetai{
 }
 
 
+class Novels: Object{
+    @objc dynamic var ncode : String = ""
+    @objc dynamic var nnumber : Int = 0
+    @objc dynamic var global_point : Int = 0
+    @objc dynamic var keyword : String = ""
+    @objc dynamic var genre : Int = 0
+    @objc dynamic var title : String = ""
+    @objc dynamic var userid : Int = 0
+    @objc dynamic var fav_novel_cnt : Int = 0
+    @objc dynamic var all_point : Int = 0
+    @objc dynamic var end : Int = 0
+    @objc dynamic var all_hyoka_cnt : Int = 0
+    @objc dynamic var review_cnt : Int = 0
+    @objc dynamic var general_all_no : Int = 0
+    @objc dynamic var novelupdated_at : Date = Date()
+    @objc dynamic var general_lastup : Date = Date()
+    @objc dynamic var general_firstup : Date = Date()
+    @objc dynamic var novel_type : Int = 0
+    @objc dynamic var biggenre : Int = 0
+    @objc dynamic var length : Int = 0
+    @objc dynamic var story : String = ""
+}
+
+class Stories: Object{
+    @objc dynamic var ncode : String = ""
+    @objc dynamic var nnumber : Int = 0
+    @objc dynamic var no : Int = 0
+    @objc dynamic var story : String = ""
+}
+
 //
 //  BaseViewController
 //  narrowReader
@@ -30,9 +64,6 @@ class novelDetai{
 //  Copyright © 2018年 kaeruko. All rights reserved.
 //
 
-import UIKit
-import Alamofire
-import RealmSwift
 
 class narrowPageViewController: narrowBaseViewController, SearchModalViewControllerDelegate, UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
 

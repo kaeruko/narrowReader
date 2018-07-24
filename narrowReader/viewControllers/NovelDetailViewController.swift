@@ -12,7 +12,10 @@ import RealmSwift
 
 class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate {
 
+    private var realm: Realm!
     var ndetail : novelDetai = novelDetai()
+    var newNovel : Novels = Novels()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -64,19 +67,29 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         self.view.addSubview(scrollView)
     }
 
+
     func getNovelNumber(){
         var url : String = "https://ncode.syosetu.com/"
         url.append((ndetail.ncode as NSString).lowercased)
         url.append("/")
         Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-print(utf8Text)
+//print(utf8Text)
                 var ans: [String] = []
                 utf8Text.pregMatche(pattern: "ncode/(\\d+)/", matches: &ans)
                 print(ans[1])
+                self.newNovel.ncode = self.ndetail.ncode
+                self.newNovel.nnumber = Int(ans[1])!
+                self.newNovel.title = self.ndetail.title
+                self.newNovel.story = self.ndetail.story
+                self.newNovel.general_all_no = self.ndetail.general_all_no
+                try! self.realm.write {
+                    self.realm.add(self.newNovel)
+                }
+
                 do {
                     self.textLabel.text = "本文取得準備中"
-                    self.getNovelText(nnumber: Int(ans[1])!, no: 1)
+                    self.getNovelText(nnumber: self.newNovel.nnumber, no: 1)
                 } catch {
                     print(error)
                 }
@@ -86,8 +99,8 @@ print(utf8Text)
     }
 
     var noveltext : String = ""
+
     func getNovelText(nnumber : Int , no : Int = 0) {
-print(self.noveltext)
         var url : String = "https://novel18.syosetu.com/txtdownload/dlstart/ncode/"
         url.append(String(nnumber ))
         url.append("/?no=")
@@ -123,19 +136,23 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
         }
     }
     
+    
     func getNovel(){
-        //何ページあるか
-        self.getNovelNumber()
-        //nnumber取得
+        let hit = self.realm.objects(Novels.self).filter("ncode ="+self.ndetail.ncode)
+print(hit)
+        //DB保存されてるか
+        if(hit.count > 0){
+            print(hit.value(forKey: "title"))
+        }else{
+            //nnumber取得
+            self.getNovelNumber()
+        }
         
 
         
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
         //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&nocgenre=3&word=%E7%9B%A3%E7%A6%81
-
-        print(self.ndetail.title)
-        
     }
     
     

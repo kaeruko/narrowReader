@@ -59,16 +59,9 @@ class NovelTableViewCell: UITableViewCell {
         self.length.frame(forAlignmentRect: CGRect(x: 0, y: 0, width: self.frame.width*1.5, height: 0))
         self.summary.font = UIFont.systemFont(ofSize: 12)
 
-        self.title.adjustsFontSizeToFitWidth = true
-        self.summary.adjustsFontSizeToFitWidth = true
-        self.length.adjustsFontSizeToFitWidth = true
-
         self.title.numberOfLines = 0
         self.summary.numberOfLines = 0
-
-        self.title.translatesAutoresizingMaskIntoConstraints = false
-        self.summary.translatesAutoresizingMaskIntoConstraints = false
-        self.length.translatesAutoresizingMaskIntoConstraints = false
+        self.length.numberOfLines = 0
 
         
         NSLayoutConstraint.activate([
