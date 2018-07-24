@@ -17,16 +17,6 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.realm = try! Realm()
-        let hit = self.realm.objects(Novels.self).filter("ncode = N8546EW")
-
-//        if var hit : Results<Novels> = self.realm.objects(Novels.self).filter("ncode = N8546EW"){
-//            print(hit)
-//
-//        }
-
-
         self.title = "narrow-reader"
         self.view.backgroundColor = UIColor.white
         let appDelegate = UIApplication.shared.delegate as! AppDelegate

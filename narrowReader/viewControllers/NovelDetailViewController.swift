@@ -138,7 +138,10 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
     
     
     func getNovel(){
-        let hit = self.realm.objects(Novels.self).filter("ncode ="+self.ndetail.ncode)
+
+        self.realm = try! Realm()
+        let hit = self.realm.objects(Novels.self).filter("ncode ='\(self.ndetail.ncode)'")
+        print("getNovel")
 print(hit)
         //DB保存されてるか
         if(hit.count > 0){
