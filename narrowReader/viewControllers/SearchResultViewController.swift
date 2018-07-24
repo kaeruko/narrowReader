@@ -20,7 +20,6 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(self.condition.ignoreWord)
         self.title = "検索結果"
         self.view.backgroundColor = UIColor.white
         self.searchByApi()
@@ -90,15 +89,15 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     var resultRow : [novelDetai] = []
     open func searchByApi() {
-
+        var url : String = "https://api.syosetu.com/novel18api/api/?lim=5&libtype=1&out=json&nocgenre=3&word="
+        url.append(self.condition.searchWord.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
+        url.append("&notword="+self.condition.ignoreWord)
+        
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
         //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
-        Alamofire.request("https://api.syosetu.com/novel18api/api/?libtype=1&out=json&nocgenre=3&word=%E7%9B%A3%E7%A6%81", headers:["Cookie": "over18=yes;"]).response { response in      //連載
-
+        Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
 
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-
-                let regex = try! NSRegularExpression(pattern: "S(w+)ift", options: [])
                 var searchresult: Data =  utf8Text.data(using: String.Encoding.utf8)!
                 do {
                     // パースする
@@ -136,9 +135,6 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
                 }
             }
         }
-
-
-
     }
     
     
