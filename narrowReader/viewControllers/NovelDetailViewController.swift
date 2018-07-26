@@ -14,59 +14,64 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
 
     private var realm: Realm!
     var ndetail : novelDetai = novelDetai()
-    var newNovel : Novels = Novels()
+    var novelModel : Novels = Novels()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
+        self.title = ndetail.title
         self.setScroll()
         self.getNovel()
-
-
-
-        return
-
-        let file_name = "textdl.txt"
-        
-        if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
-            print(dir)
-            let path_file_name = dir.appendingPathComponent( file_name )
-            do {
-                
-                let searchresult: String = try String( contentsOf: path_file_name, encoding: String.Encoding.utf8 )
-                print(searchresult)
-                var sr: Data =  searchresult.data(using: String.Encoding.utf8)!
-                
-                self.view.addSubview(scrollView)
-                
-                
-            } catch {
-                //エラー処理
-            }
-        }
-
     }
 
     var scrollView : UIScrollView = UIScrollView()
-    var textLabel : UITextView = UITextView()
+    var textView : UITextView = UITextView()
     
     func setScroll(){
         self.scrollView.backgroundColor = UIColor.white
         
         // 表示窓のサイズと位置を設定
         self.scrollView.frame.size = CGSize(width: self.frameWidth * 1.0 , height: self.frameHeight * 1.0 )
+        self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: self.frameHeight * 1.0 )
         self.scrollView.center = self.view.center
-        self.textLabel.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: self.frameHeight * 1.0)
-        self.textLabel.text = "お待ち下さい"
-        self.textLabel.font = UIFont.systemFont(ofSize: 30)
+        self.textView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: self.frameHeight * 1.0)
+        self.textView.text = "お待ち下さい"
+        self.textView.isEditable = false
+        self.textView.font = UIFont.systemFont(ofSize: 30)
 
-        self.scrollView.addSubview(self.textLabel)
+        
+        self.scrollView.addSubview(self.textView)
         // Delegate を設定
         self.scrollView.delegate = self as! UIScrollViewDelegate
         self.view.addSubview(scrollView)
     }
 
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("scrollViewDidScroll \(scrollView.bounces)")
+        print("\(scrollView.contentOffset.y) / \(scrollView.bounds.size.height) \(scrollView.contentSize.height)")
+
+    }
+
+    
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print("scrollViewDidEndDecelerating")
+        print(scrollView.bounces)
+        print(scrollView.bounds.size.height)
+    }
+
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        print("scrollViewDidScrollToTop")
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("scrollViewDidEndDragging")
+    }
+
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        print("scrollViewWillEndDragging")
+        print(velocity)
+        print(targetContentOffset)
+    }
 
     func getNovelNumber(){
         var url : String = "https://ncode.syosetu.com/"
@@ -78,18 +83,20 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
                 var ans: [String] = []
                 utf8Text.pregMatche(pattern: "ncode/(\\d+)/", matches: &ans)
                 print(ans[1])
-                self.newNovel.ncode = self.ndetail.ncode
-                self.newNovel.nnumber = Int(ans[1])!
-                self.newNovel.title = self.ndetail.title
-                self.newNovel.story = self.ndetail.story
-                self.newNovel.general_all_no = self.ndetail.general_all_no
+                self.novelModel.ncode = self.ndetail.ncode
+                self.novelModel.nnumber = Int(ans[1])!
+                self.novelModel.title = self.ndetail.title
+                self.novelModel.story = self.ndetail.story
+                self.novelModel.general_all_no = self.ndetail.general_all_no
+                self.novelModel.last_read_no = 0
+                
                 try! self.realm.write {
-                    self.realm.add(self.newNovel)
+                    self.realm.add(self.novelModel)
                 }
 
                 do {
-                    self.textLabel.text = "本文取得準備中"
-                    self.getNovelText(nnumber: self.newNovel.nnumber, no: 1)
+                    self.textView.text = "本文取得準備中"
+                    self.getNovelText(nnumber: self.novelModel.nnumber, no: 1)
                 } catch {
                     print(error)
                 }
@@ -98,8 +105,22 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
 
     }
 
-    var noveltext : String = ""
+    func getNovelTextByRealm(nnumber : Int , no : Int = 0, last_no : Int) {
 
+        if var stories : Results<Stories> = self.realm.objects(Stories.self).filter("ncode ='\(self.ndetail.ncode)'").sorted(byKeyPath: "no", ascending: true){
+            for story in stories {
+                self.noveltext.append(String(story.no))
+                self.noveltext.append("\n--------------\n")
+                self.noveltext.append(story.story)
+            }
+            self.textView.font = UIFont.systemFont(ofSize: 12)
+            self.textView.text = self.noveltext
+            //次の1話を取得。それが最後まで読めたらその次の1話を取得
+        }
+    }
+
+
+    var noveltext : String = ""
     func getNovelText(nnumber : Int , no : Int = 0) {
         var url : String = "https://novel18.syosetu.com/txtdownload/dlstart/ncode/"
         url.append(String(nnumber ))
@@ -117,16 +138,30 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
                         waitingtext.append(" / ")
                         waitingtext.append(String(self.ndetail.general_all_no))
                         waitingtext.append(")")
-                        self.textLabel.text = waitingtext
+                        self.textView.text = waitingtext
                         self.noveltext.append("\n\(no)\n")
                         self.noveltext.append(utf8Text)
-print("self.ndetail.general_all_no")
+
+                        //新規Storyを追加
+                        var newStory : Stories = Stories()
+                        newStory.ncode = self.novelModel.ncode
+                        newStory.nnumber = self.novelModel.nnumber
+                        newStory.no = no
+                        newStory.story = utf8Text
+
+                        // データを更新
+                        try! self.realm.write() {
+                            self.realm.add(newStory)
+                            self.novelModel.last_read_no = no
+                        }
+                        print("self.ndetail.general_all_no")
 print(String(self.ndetail.general_all_no)+" : "+String(no))
                         if(no >= self.ndetail.general_all_no){
-                            self.textLabel.font = UIFont.systemFont(ofSize: 12)
-                            self.textLabel.text = self.noveltext
+                            self.textView.font = UIFont.systemFont(ofSize: 12)
+                            self.textView.text = self.noveltext
                             return
                         }
+//再帰やめる
                         self.getNovelText(nnumber: nnumber,no:no+1)
                     } catch {
                         print(error)
@@ -139,15 +174,21 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
     
     func getNovel(){
 
-        self.realm = try! Realm()
-        let hit = self.realm.objects(Novels.self).filter("ncode ='\(self.ndetail.ncode)'")
-        print("getNovel")
-print(hit)
-        //DB保存されてるか
-        if(hit.count > 0){
-            print(hit.value(forKey: "title"))
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let path = paths[0] + "/narrowreader.realm"
+        print(path)
+        let url = NSURL(fileURLWithPath: path)
+        self.realm = try! Realm(fileURL: url as URL)
+        if let hit = self.realm.objects(Novels.self).filter("ncode ='\(self.ndetail.ncode)'").first{
+            print("getNovel 存在チェック")
+            //保存されてるnoチェック
+            print("保存してる最終章番号:\(hit.last_read_no)")
+            print("最終更新話:\(self.ndetail.general_all_no)")
+            print(url)
+            self.getNovelTextByRealm(nnumber:self.novelModel.nnumber, no: 0, last_no: self.ndetail.general_all_no)
+
         }else{
-            //nnumber取得
+            //新規なのでnnumberから新規追加
             self.getNovelNumber()
         }
         

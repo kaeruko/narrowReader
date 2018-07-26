@@ -46,7 +46,8 @@ class Novels: Object{
     @objc dynamic var novel_type : Int = 0
     @objc dynamic var biggenre : Int = 0
     @objc dynamic var length : Int = 0
-    @objc dynamic var story : String = ""
+    @objc dynamic var story : String = ""   //あらすじ
+    @objc dynamic var last_read_no : Int = 0
 }
 
 class Stories: Object{
