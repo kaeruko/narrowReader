@@ -38,11 +38,12 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         self.textView.isEditable = false
         self.textView.font = UIFont.systemFont(ofSize: 30)
 
-        
+print(self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
         self.scrollView.addSubview(self.textView)
-        // Delegate を設定
+        
         self.scrollView.delegate = self as! UIScrollViewDelegate
-        self.view.addSubview(scrollView)
+        self.view.addSubview(self.scrollView)
+
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -51,8 +52,6 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
 
     }
 
-    
-    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         print("scrollViewDidEndDecelerating")
         print(scrollView.bounces)
@@ -115,6 +114,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
             }
             self.textView.font = UIFont.systemFont(ofSize: 12)
             self.textView.text = self.noveltext
+            print(self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
             //次の1話を取得。それが最後まで読めたらその次の1話を取得
         }
     }

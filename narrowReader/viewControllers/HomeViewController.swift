@@ -15,11 +15,18 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
     var genres = ["恋愛","ファンタジー","ギャグ","エッセイ","詩","童話"]
     private var realm: Realm!
 
+    var scrollView : UIScrollView = UIScrollView()
+    var textView : UITextView = UITextView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "narrow-reader"
         self.view.backgroundColor = UIColor.white
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
+
+
+
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
