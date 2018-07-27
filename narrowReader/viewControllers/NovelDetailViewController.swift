@@ -30,19 +30,21 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         self.scrollView.backgroundColor = UIColor.white
         
         // 表示窓のサイズと位置を設定
-        self.scrollView.frame.size = CGSize(width: self.frameWidth * 1.0 , height: self.frameHeight * 1.0 )
-        self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: self.frameHeight * 1.0 )
         self.scrollView.center = self.view.center
-        self.textView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: self.frameHeight * 1.0)
-        self.textView.text = "お待ち下さい"
+        self.endsetText()
         self.textView.isEditable = false
         self.textView.font = UIFont.systemFont(ofSize: 30)
-
-print(self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
         self.scrollView.addSubview(self.textView)
-        
         self.scrollView.delegate = self as! UIScrollViewDelegate
+        let fitsize : CGSize = (self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
+        print(fitsize)
+        self.scrollView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
+        self.textView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
+        self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
+        self.textView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
+
         self.view.addSubview(self.scrollView)
+        self.textView.text = "お待ち下さい"
 
     }
 
@@ -72,6 +74,17 @@ print(self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: C
         print(targetContentOffset)
     }
 
+    func endsetText(){
+        print("!!!!!endsetText!!!!!!")
+        let fitsize : CGSize = (self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
+        print(fitsize)
+        self.scrollView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
+        self.textView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
+        self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
+        self.textView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
+
+    }
+    
     func getNovelNumber(){
         var url : String = "https://ncode.syosetu.com/"
         url.append((ndetail.ncode as NSString).lowercased)
@@ -114,6 +127,7 @@ print(self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: C
             }
             self.textView.font = UIFont.systemFont(ofSize: 12)
             self.textView.text = self.noveltext
+            self.endsetText()
             print(self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
             //次の1話を取得。それが最後まで読めたらその次の1話を取得
         }

@@ -49,7 +49,8 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         cell.summary?.numberOfLines = 0
         cell.summary?.text = self.resultRow[indexPath.row].story as? String
         cell.title?.text = self.resultRow[indexPath.row].title as? String
-        cell.length?.text = self.resultRow[indexPath.row].length as? String
+        cell.title?.font = UIFont.systemFont(ofSize: 20)
+        cell.length?.text = "\(self.resultRow[indexPath.row].length)文字"
         cell.layoutIfNeeded()
         
         return cell
@@ -79,10 +80,10 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         self.view.addSubview(self.TableView)
         self.TableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.TableView.topAnchor.constraint(equalTo: view.topAnchor),
-            self.TableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            self.TableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            self.TableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            self.TableView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.TableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.TableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.TableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
         ])
 
     }
@@ -128,8 +129,8 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
                         ndetail.length = i["length"] as! Int as! Int
                         ndetail.story = i["story"] as! String
                         self.resultRow.append(ndetail)
-                        self.setTable()
                     }
+                    self.setTable()
                     self.novelcount = (self.resultRow.count)
                 } catch {
                     print(error)

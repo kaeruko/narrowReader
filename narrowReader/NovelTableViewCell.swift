@@ -64,24 +64,25 @@ class NovelTableViewCell: UITableViewCell {
         self.length.numberOfLines = 0
 
         
-        NSLayoutConstraint.activate([
-            self.title.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            self.title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-            self.title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-        ])
+//        NSLayoutConstraint.activate([
+//            self.title.topAnchor.constraint(equalTo: topAnchor, constant: self.frame.height * 0.1),
+//            self.title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+////            self.title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+////            self.title.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
+//        ])
         
         NSLayoutConstraint.activate([
-            self.length.topAnchor.constraint(equalTo: topAnchor, constant: 50),
-            self.length.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-            self.length.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            self.length.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            self.length.topAnchor.constraint(equalTo: topAnchor, constant: self.frame.height * 1.0),
+            self.length.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+//            self.length.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+//            self.length.bottomAnchor.constraint(equalTo: bottomAnchor, constant: self.frame.height * 1.0),
         ])
 
         NSLayoutConstraint.activate([
-            self.summary.topAnchor.constraint(equalTo: topAnchor, constant: self.frame.height * 1.0),
-            self.summary.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-            self.summary.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            self.summary.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            self.summary.topAnchor.constraint(equalTo: topAnchor, constant: self.frame.height * 2.0),
+            self.summary.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            self.summary.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+            self.summary.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
         ])
 
     }
