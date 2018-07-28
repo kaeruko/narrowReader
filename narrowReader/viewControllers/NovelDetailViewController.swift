@@ -19,6 +19,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = ndetail.title
+
         self.setScroll()
         self.getNovel()
     }
@@ -63,10 +64,30 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
 
     }
 
+    var isLoading : Bool = false
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("scrollViewDidScroll \(scrollView.bounces)")
-        print("\(scrollView.contentOffset.y) / \(scrollView.bounds.size.height) \(scrollView.contentSize.height)")
+        var isBouncing : Bool = false
+//        print("scrollViewDidScroll \(scrollView.bounces)")
+//        isBouncing = (scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)) > 0.9
+        isBouncing = ((scrollView.contentSize.height - scrollView.bounds.size.height) - scrollView.contentOffset.y ) < 10000
 
+        if(self.isLoading == true){
+            return
+        }
+        print("\(scrollView.contentOffset.y) / \(scrollView.bounds.size.height) \(scrollView.contentSize.height)")
+//        print((scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)))
+        print((scrollView.contentSize.height - scrollView.bounds.size.height) - scrollView.contentOffset.y  )
+
+        if(isBouncing){
+            self.isLoading = true
+            if(self.novelModel.last_read_no >= self.novelModel.general_all_no){
+                return
+            }
+print("ここ何度も来てる？")
+            self.getNovelText(nnumber: self.novelModel.nnumber, no: self.novelModel.last_read_no + 1)
+        }
+        
+        
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -84,23 +105,23 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        print("scrollViewWillEndDragging")
-        print(velocity)
-        print(targetContentOffset)
+//        print("scrollViewWillEndDragging")
+//        print(velocity)
+//        print(targetContentOffset)
     }
 
     func endsetText(){
-        print("!!!!!endsetText!!!!!!")
         let fitsize : CGSize = (self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
         print(fitsize)
         self.scrollView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: self.frameHeight)
         self.textView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
         self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
         self.textView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
-
     }
     
     func getNovelNumber(){
+        self.textView.text = "本文取得中……"
+        
         var url : String = "https://ncode.syosetu.com/"
         url.append((ndetail.ncode as NSString).lowercased)
         url.append("/")
@@ -137,20 +158,27 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         if var stories : Results<Stories> = self.realm.objects(Stories.self).filter("ncode ='\(self.ndetail.ncode)'").sorted(byKeyPath: "no", ascending: true){
             for story in stories {
                 self.noveltext.append(String(story.no))
-                self.noveltext.append("\n--------------\n")
+                self.noveltext.append("\n\n--------\(story.no)/\(self.novelModel.general_all_no)--------\n\n")
                 self.noveltext.append(story.story)
+print("realmに保存：\(story.no)")
             }
             self.textView.font = UIFont.systemFont(ofSize: 12)
             self.textView.text = self.noveltext
-            self.endsetText()
-            print(self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
-            //次の1話を取得。それが最後まで読めたらその次の1話を取得
+            //更新があれば次の一話取得。その後は遅延ロードに任せる
+print("現在読んでるところ\(no)全話\(last_no)")
+            if(last_no > no){
+                self.isLoading = true
+                self.getNovelText(nnumber: nnumber, no: no+1, scrollend: true  )
+            }else{
+                self.endsetText()
+                print("更新はありません")
+            }
         }
     }
 
 
     var noveltext : String = ""
-    func getNovelText(nnumber : Int , no : Int = 0) {
+    func getNovelText(nnumber : Int , no : Int = 0, scrollend : Bool = false) {
         var url : String = "https://novel18.syosetu.com/txtdownload/dlstart/ncode/"
         url.append(String(nnumber ))
         url.append("/?no=")
@@ -162,13 +190,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
             Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
                 if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
                     do {
-                        var waitingtext : String = "本文取得中……("
-                        waitingtext.append(String(no))
-                        waitingtext.append(" / ")
-                        waitingtext.append(String(self.ndetail.general_all_no))
-                        waitingtext.append(")")
-                        self.textView.text = waitingtext
-                        self.noveltext.append("\n\(no)\n")
+                        self.noveltext.append("\n\n--------\(no)/\(self.ndetail.general_all_no)--------\n\n")
                         self.noveltext.append(utf8Text)
 
                         //新規Storyを追加
@@ -180,18 +202,28 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
 
                         // データを更新
                         try! self.realm.write() {
-                            self.realm.add(newStory)
                             self.novelModel.last_read_no = no
                         }
-                        print("self.ndetail.general_all_no")
+                        try! self.realm.write() {
+                            self.realm.add(newStory)
+                        }
 print(String(self.ndetail.general_all_no)+" : "+String(no))
+                        self.textView.font = UIFont.systemFont(ofSize: 12)
+                        self.textView.text = self.noveltext
+                        self.endsetText()
+
+                        if(scrollend){
+                            let a  = CGPoint(x:0, y:(self.scrollView.contentSize.height - self.scrollView.bounds.size.height))
+                            print("\(a)に移動")
+                            self.scrollView.setContentOffset(a, animated: false)
+                        }
+
+
+
+                        self.isLoading = false
                         if(no >= self.ndetail.general_all_no || no >= 3){
-                            self.textView.font = UIFont.systemFont(ofSize: 12)
-                            self.textView.text = self.noveltext
                             return
                         }
-//再帰やめる
-                        self.getNovelText(nnumber: nnumber,no:no+1)
                     } catch {
                         print(error)
                     }
@@ -214,24 +246,26 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
             print("保存してる最終章番号:\(hit.last_read_no)")
             print("最終更新話:\(self.ndetail.general_all_no)")
             print(url)
-            self.getNovelTextByRealm(nnumber:self.novelModel.nnumber, no: 0, last_no: self.ndetail.general_all_no)
+            //最新情報に更新
 
+            try! self.realm.write {
+                hit.title = self.ndetail.title
+                hit.story = self.ndetail.story
+                hit.general_all_no = self.ndetail.general_all_no
+                self.novelModel = hit
+                print(self.novelModel)
+                self.getNovelTextByRealm(nnumber:self.novelModel.nnumber, no: self.novelModel.last_read_no, last_no: self.novelModel.general_all_no)
+            }
+            
         }else{
             //新規なのでnnumberから新規追加
             self.getNovelNumber()
         }
-        
-
-        
-        //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
-        //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
-        //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&nocgenre=3&word=%E7%9B%A3%E7%A6%81
     }
     
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 

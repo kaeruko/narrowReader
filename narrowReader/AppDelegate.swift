@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Realm
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,7 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let naviVC = narrowNavigationViewController(rootViewController: vc)
         naviVC.viewControllers = [vc]
         self.window!.rootViewController = naviVC
-        
+        // ここから追加
+        let config = Realm.Configuration(
+            schemaVersion: 1,
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 1) {}
+        })
+        Realm.Configuration.defaultConfiguration = config
         return true
     }
 
