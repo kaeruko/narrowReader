@@ -31,20 +31,35 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         
         // 表示窓のサイズと位置を設定
         self.scrollView.center = self.view.center
-        self.endsetText()
+//        self.endsetText()
         self.textView.isEditable = false
         self.textView.font = UIFont.systemFont(ofSize: 30)
         self.scrollView.addSubview(self.textView)
         self.scrollView.delegate = self as! UIScrollViewDelegate
         let fitsize : CGSize = (self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
         print(fitsize)
-        self.scrollView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
+        self.scrollView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: self.frameHeight)
         self.textView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
-        self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
+        self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: self.frameHeight )
         self.textView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
-
         self.view.addSubview(self.scrollView)
         self.textView.text = "お待ち下さい"
+        self.textView.translatesAutoresizingMaskIntoConstraints = false
+        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+//        NSLayoutConstraint.activate([
+//            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
+//            self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
+////            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
+////            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
+//        ])
+
+//        NSLayoutConstraint.activate([
+//            self.textView.topAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: 0),
+//            self.textView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: 0),
+////            self.textView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor, constant: 0),
+////            self.textView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: 0),
+//        ])
 
     }
 
@@ -78,7 +93,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         print("!!!!!endsetText!!!!!!")
         let fitsize : CGSize = (self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
         print(fitsize)
-        self.scrollView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
+        self.scrollView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: self.frameHeight)
         self.textView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: fitsize.height)
         self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
         self.textView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
@@ -170,7 +185,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
                         }
                         print("self.ndetail.general_all_no")
 print(String(self.ndetail.general_all_no)+" : "+String(no))
-                        if(no >= self.ndetail.general_all_no){
+                        if(no >= self.ndetail.general_all_no || no >= 3){
                             self.textView.font = UIFont.systemFont(ofSize: 12)
                             self.textView.text = self.noveltext
                             return
