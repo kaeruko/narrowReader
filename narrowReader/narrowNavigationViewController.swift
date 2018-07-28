@@ -54,8 +54,10 @@ class narrowNavigationViewController: UINavigationController {
             Constraint(item:self.searchBtn, .right,   to: navigationView, .right, constant:0, multiplier: 1.0 ),
             Constraint(item:self.searchBtn, .width,   to: navigationView, .width, constant:0, multiplier: 1.0 ),
             ])
-        print(self.title)
-        self.navigationItem.title = self.title
+        var titlelabel : UILabel = UILabel()
+        titlelabel.text = self.title
+        titlelabel.numberOfLines = 0
+        self.navigationItem.titleView = titlelabel
     }
 
 

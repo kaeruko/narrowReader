@@ -32,7 +32,6 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         
         // 表示窓のサイズと位置を設定
         self.scrollView.center = self.view.center
-//        self.endsetText()
         self.textView.isEditable = false
         self.textView.font = UIFont.systemFont(ofSize: 30)
         self.scrollView.addSubview(self.textView)
@@ -45,22 +44,6 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         self.textView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
         self.view.addSubview(self.scrollView)
         self.textView.text = "お待ち下さい"
-        self.textView.translatesAutoresizingMaskIntoConstraints = false
-        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
-
-//        NSLayoutConstraint.activate([
-//            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0),
-//            self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
-////            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
-////            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
-//        ])
-
-//        NSLayoutConstraint.activate([
-//            self.textView.topAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: 0),
-//            self.textView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: 0),
-////            self.textView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor, constant: 0),
-////            self.textView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: 0),
-//        ])
 
     }
 
@@ -69,7 +52,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
         var isBouncing : Bool = false
 //        print("scrollViewDidScroll \(scrollView.bounces)")
 //        isBouncing = (scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)) > 0.9
-        isBouncing = ((scrollView.contentSize.height - scrollView.bounds.size.height) - scrollView.contentOffset.y ) < 10000
+        isBouncing = ((scrollView.contentSize.height - scrollView.bounds.size.height) - scrollView.contentOffset.y ) < 3000
 
         if(self.isLoading == true){
             return
@@ -234,12 +217,12 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
     
     
     func getNovel(){
-
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let path = paths[0] + "/narrowreader.realm"
         print(path)
         let url = NSURL(fileURLWithPath: path)
         self.realm = try! Realm(fileURL: url as URL)
+        self.textView.text = self.ndetail.title
         if let hit = self.realm.objects(Novels.self).filter("ncode ='\(self.ndetail.ncode)'").first{
             print("getNovel 存在チェック")
             //保存されてるnoチェック
@@ -247,7 +230,6 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
             print("最終更新話:\(self.ndetail.general_all_no)")
             print(url)
             //最新情報に更新
-
             try! self.realm.write {
                 hit.title = self.ndetail.title
                 hit.story = self.ndetail.story
