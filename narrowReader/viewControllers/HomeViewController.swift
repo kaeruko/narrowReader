@@ -14,34 +14,6 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
     
     var genres = ["恋愛","ファンタジー","ギャグ","エッセイ","詩","童話"]
     private var realm: Realm!
-
-    var scrollView : UIScrollView = UIScrollView()
-    var textView : UITextView = UITextView()
-    
-    func setScroll(){
-        self.scrollView.backgroundColor = UIColor.white
-        
-        // 表示窓のサイズと位置を設定
-        self.scrollView.frame.size = CGSize(width: self.frameWidth * 1.0 , height: self.frameHeight * 1.0 )
-        self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: 3000 )
-        self.scrollView.center = self.view.center
-        self.textView.frame = CGRect(x: 0 , y: 0, width: self.frameWidth * 1.0, height: self.frameHeight * 1.0)
-        self.textView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: 3000 )
-        self.textView.text = "お待ち下さいAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        self.textView.isEditable = false
-        self.textView.font = UIFont.systemFont(ofSize: 30)
-        
-        let fitsize : CGSize = (self.textView.sizeThatFits(CGSize(width: self.frameWidth * 1.0 , height: CGFloat.greatestFiniteMagnitude)))
-        self.scrollView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
-        self.textView.contentSize = CGSize(width: self.frameWidth * 1.0 , height: fitsize.height )
-
-
-        self.scrollView.addSubview(self.textView)
-        
-        self.scrollView.delegate = self as! UIScrollViewDelegate
-        self.view.addSubview(self.scrollView)
-        
-    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print("scrollViewDidScroll \(scrollView.bounces)")
@@ -68,15 +40,12 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
         print(velocity)
         print(targetContentOffset)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "narrow-reader"
         self.view.backgroundColor = UIColor.white
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-
-
-
-
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

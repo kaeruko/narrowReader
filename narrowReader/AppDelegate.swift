@@ -19,10 +19,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
+
+
         let vc = HomeViewController()
         let naviVC = narrowNavigationViewController(rootViewController: vc)
         naviVC.viewControllers = [vc]
+
+//        var tab1 : UIViewController = SearchResultViewController()
+//        tab1.tabBarItem = UITabBarItem(tabBarSystemItem: UITabBarSystemItem.featured, tag: 1)
+//
+//        var tabBarController : UITabBarController = UITabBarController()
+//        tabBarController.setViewControllers([naviVC, tab1], animated: true)
         self.window!.rootViewController = naviVC
+
+//        self.window!.rootViewController = tabBarController
+//        self.window!.makeKeyAndVisible()
+
+
+
         // ここから追加
         let config = Realm.Configuration(
             schemaVersion: 1,

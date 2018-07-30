@@ -18,7 +18,7 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = ndetail.title
+        self.title = ndetail.title        
 
         self.setScroll()
         self.getNovel()
