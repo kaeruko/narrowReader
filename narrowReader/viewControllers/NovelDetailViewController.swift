@@ -10,11 +10,12 @@ import UIKit
 import Alamofire
 import RealmSwift
 
-class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate {
+class NovelDetailViewController: narrowPageViewController, UIScrollViewDelegate {
 
     private var realm: Realm!
     var ndetail : novelDetai = novelDetai()
     var novelModel : Novels = Novels()
+    var favModel : Favorites = Favorites()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,77 @@ class NovelDetailViewController: narrowBaseViewController, UIScrollViewDelegate 
 
         self.setScroll()
         self.getNovel()
+        self.setFooter()
+    }
+
+    var menubtn : UIButton = UIButton()
+    var favbtn : UIButton = UIButton()
+    var bkbtn : UIButton = UIButton()
+
+
+    func setFooter(){
+        var footer : UIView = UIView()
+        footer.backgroundColor = UIColor.brown
+        let footerhight = self.frameHeight * 0.1
+        let diff = self.frameHeight - footerhight
+        footer.frame = CGRect(x: 0, y: diff , width: self.frameWidth, height: footerhight)
+        self.view.addSubview(footer)
+        
+        let menuheight = footer.frame.height * 0.5
+        let menuwidth = footer.frame.width * 0.1
+        let menux = ((footer.frame.width) - (menuwidth)) * 0.9
+        let menuy = ((footer.frame.height) - (menuheight)) * 0.5
+        self.menubtn.frame = CGRect(x: menux, y: menuy, width: menuwidth, height: menuheight)
+        self.menubtn.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1)
+        self.menubtn.setTitleColor(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1), for: .normal)
+        self.menubtn.setTitle("menu", for: .normal)
+        self.menubtn.setTitleColor(UIColor.white, for: .normal)
+        self.menubtn.addTarget(self, action: #selector(self.openMenu(sender:)), for:.touchUpInside)
+        footer.addSubview(self.menubtn)
+        
+        self.favbtn.frame = CGRect(x: ((footer.frame.width) - (menuwidth)) * 0.1, y: menuy, width: menuwidth, height: menuheight)
+        self.favbtn.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1)
+        self.favbtn.setTitleColor(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1), for: .normal)
+        self.favbtn.setTitle("☆", for: .normal)
+        self.favbtn.setTitleColor(UIColor.white, for: .normal)
+        self.favbtn.addTarget(self, action: #selector(self.addFavorite(sender:)), for:.touchUpInside)
+        footer.addSubview(self.favbtn)
+        
+        self.bkbtn.frame = CGRect(x: ((footer.frame.width) - (menuwidth)) * 0.3, y: menuy, width: menuwidth, height: menuheight)
+        self.bkbtn.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1)
+        self.bkbtn.setTitleColor(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1), for: .normal)
+        self.bkbtn.setTitle("BK", for: .normal)
+        self.bkbtn.setTitleColor(UIColor.white, for: .normal)
+        self.bkbtn.addTarget(self, action: #selector(self.addBookmark(sender:)), for:.touchUpInside)
+        footer.addSubview(self.bkbtn)
+    }
+    
+    
+    @objc open func openMenu(sender : UIButton) {
+        self.searchModal.modalPresentationStyle = .custom
+        self.searchModal.delegate = self as! SearchModalViewControllerDelegate
+        self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+        present(self.searchModal, animated: true, completion: nil)
+    }
+
+
+    @objc open func addFavorite(sender : UIButton) {
+        self.favModel.ncode = self.novelModel.ncode
+        self.favModel.nnumber = self.novelModel.nnumber
+
+        try! self.realm.write {
+            self.realm.add(self.favModel)
+        }
+    }
+
+    @objc open func addBookmark(sender : UIButton) {
+print(self.favModel.ncode)
+        if(self.favModel.ncode == nil){
+            self.addFavorite(sender: sender)
+        }
+        try! self.realm.write() {
+            self.favModel.bookmark = 1
+        }
     }
 
     var scrollView : UIScrollView = UIScrollView()
@@ -149,9 +221,19 @@ print("realmに保存：\(story.no)")
             self.textView.text = self.noveltext
             //更新があれば次の一話取得。その後は遅延ロードに任せる
 print("現在読んでるところ\(no)全話\(last_no)")
+
+
+            let isbookmark = true
+            if(isbookmark){
+                self.endsetText()
+                let a  = CGPoint(x:0, y:(self.scrollView.contentSize.height - self.scrollView.bounds.size.height))
+                print("\(a)に移動")
+                self.scrollView.setContentOffset(a, animated: false)
+            }
+
             if(last_no > no){
                 self.isLoading = true
-                self.getNovelText(nnumber: nnumber, no: no+1, scrollend: true  )
+                self.getNovelText(nnumber: nnumber, no: no+1  )
             }else{
                 self.endsetText()
                 print("更新はありません")
@@ -161,7 +243,7 @@ print("現在読んでるところ\(no)全話\(last_no)")
 
 
     var noveltext : String = ""
-    func getNovelText(nnumber : Int , no : Int = 0, scrollend : Bool = false) {
+    func getNovelText(nnumber : Int , no : Int = 0) {
         var url : String = "https://novel18.syosetu.com/txtdownload/dlstart/ncode/"
         url.append(String(nnumber ))
         url.append("/?no=")
@@ -194,14 +276,6 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
                         self.textView.font = UIFont.systemFont(ofSize: 12)
                         self.textView.text = self.noveltext
                         self.endsetText()
-
-                        if(scrollend){
-                            let a  = CGPoint(x:0, y:(self.scrollView.contentSize.height - self.scrollView.bounds.size.height))
-                            print("\(a)に移動")
-                            self.scrollView.setContentOffset(a, animated: false)
-                        }
-
-
 
                         self.isLoading = false
                         if(no >= self.ndetail.general_all_no || no >= 3){

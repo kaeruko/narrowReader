@@ -18,7 +18,6 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print("scrollViewDidScroll \(scrollView.bounces)")
         print("\(scrollView.contentOffset.y) / \(scrollView.bounds.size.height) \(scrollView.contentSize.height)")
-        
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
