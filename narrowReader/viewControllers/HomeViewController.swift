@@ -11,58 +11,97 @@ import Alamofire
 import RealmSwift
 
 class HomeViewController: narrowPageViewController, UITableViewDelegate, UITableViewDataSource {
-    
-    var genres = ["恋愛","ファンタジー","ギャグ","エッセイ","詩","童話"]
+
     private var realm: Realm!
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("scrollViewDidScroll \(scrollView.bounces)")
-        print("\(scrollView.contentOffset.y) / \(scrollView.bounds.size.height) \(scrollView.contentSize.height)")
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print("scrollViewDidEndDecelerating")
-        print(scrollView.bounces)
-        print(scrollView.bounds.size.height)
-    }
-    
-    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        print("scrollViewDidScrollToTop")
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("scrollViewDidEndDragging")
-    }
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        print("scrollViewWillEndDragging")
-        print(velocity)
-        print(targetContentOffset)
-    }
-    
+    var novelcount : Int = 0
+    var resultRow : [Novels] = []
+    var TableView : UITableView = UITableView()
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "narrow-reader"
         self.view.backgroundColor = UIColor.white
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.getNovelRist()
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+        
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.genres.count
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
+    
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        let next = NovelDetailViewController()
+        next.ndetail.ncode = self.resultRow[indexPath.row].ncode
+        next.ndetail.title = self.resultRow[indexPath.row].title
+        next.ndetail.story = self.resultRow[indexPath.row].story
+        next.ndetail.general_all_no = self.resultRow[indexPath.row].general_all_no
+
+        self.navigationController?.pushViewController(next, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+
+    func getNovelRist(){
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let path = paths[0] + "/narrowreader3.realm"
+        print(path)
+        let url = NSURL(fileURLWithPath: path)
+        self.realm = try! Realm(fileURL: url as URL)
+
+        if var favorites : Results<Favorites> = self.realm.objects(Favorites.self){
+            for fav in favorites {
+                if var novel : Novels = self.realm.objects(Novels.self).filter("ncode ='\(fav.ncode)'").first{
+                    self.resultRow.append(novel)
+                }
+            }
+            self.novelcount = self.resultRow.count
+            self.setTable()
+        }
+    }
+
+    
+    func setTable() {
+        self.TableView.flashScrollIndicators()
+        self.TableView.tableFooterView = UIView()
+        self.TableView.delegate      =   self as UITableViewDelegate
+        self.TableView.dataSource    =   self as! UITableViewDataSource
+        self.TableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
+        self.view.addSubview(self.TableView)
+        self.TableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.TableView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.TableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.TableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.TableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+        ])
+    }
+
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.novelcount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "janres", for: indexPath)
-        //        cell.textLabel?.text = self.favos![indexPath.row]["title"] as! String
-        cell.textLabel?.text = self.genres[indexPath.row]
+print("cellForRowAt")
+        print(self.resultRow[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath) as! UITableViewCell
+        cell.textLabel?.text = self.resultRow[indexPath.row].title as? String
         return cell
     }
+    
     
 
 
 }
-

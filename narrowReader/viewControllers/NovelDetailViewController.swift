@@ -32,6 +32,8 @@ class NovelDetailViewController: narrowPageViewController, UIScrollViewDelegate 
 
 
     func setFooter(){
+        print(self.realm)
+
         var footer : UIView = UIView()
         footer.backgroundColor = UIColor.brown
         let footerhight = self.frameHeight * 0.1
@@ -76,6 +78,10 @@ class NovelDetailViewController: narrowPageViewController, UIScrollViewDelegate 
         present(self.searchModal, animated: true, completion: nil)
     }
 
+    var Favorite : Favorites = Favorites()
+    func isFavorite(){
+
+    }
 
     @objc open func addFavorite(sender : UIButton) {
         self.favModel.ncode = self.novelModel.ncode
@@ -87,12 +93,8 @@ class NovelDetailViewController: narrowPageViewController, UIScrollViewDelegate 
     }
 
     @objc open func addBookmark(sender : UIButton) {
-print(self.favModel.ncode)
-        if(self.favModel.ncode == nil){
-            self.addFavorite(sender: sender)
-        }
         try! self.realm.write() {
-            self.favModel.bookmark = 1
+            self.novelModel.bookmark = 1
         }
     }
 
@@ -129,20 +131,17 @@ print(self.favModel.ncode)
         if(self.isLoading == true){
             return
         }
-        print("\(scrollView.contentOffset.y) / \(scrollView.bounds.size.height) \(scrollView.contentSize.height)")
-//        print((scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)))
-        print((scrollView.contentSize.height - scrollView.bounds.size.height) - scrollView.contentOffset.y  )
+//        print("\(scrollView.contentOffset.y) / \(scrollView.bounds.size.height) \(scrollView.contentSize.height)")
+////        print((scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)))
+//        print((scrollView.contentSize.height - scrollView.bounds.size.height) - scrollView.contentOffset.y  )
 
         if(isBouncing){
-            self.isLoading = true
             if(self.novelModel.last_read_no >= self.novelModel.general_all_no){
                 return
             }
-print("ここ何度も来てる？")
+            self.isLoading = true
             self.getNovelText(nnumber: self.novelModel.nnumber, no: self.novelModel.last_read_no + 1)
         }
-        
-        
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -199,6 +198,7 @@ print("ここ何度も来てる？")
 
                 do {
                     self.textView.text = "本文取得準備中"
+                    self.isLoading = true
                     self.getNovelText(nnumber: self.novelModel.nnumber, no: 1)
                 } catch {
                     print(error)
@@ -232,6 +232,7 @@ print("現在読んでるところ\(no)全話\(last_no)")
             }
 
             if(last_no > no){
+                print("getNovelTextByRealm?ここか？")
                 self.isLoading = true
                 self.getNovelText(nnumber: nnumber, no: no+1  )
             }else{
@@ -244,6 +245,10 @@ print("現在読んでるところ\(no)全話\(last_no)")
 
     var noveltext : String = ""
     func getNovelText(nnumber : Int , no : Int = 0) {
+//        if(self.isLoading == true){
+//            return
+//        }
+
         var url : String = "https://novel18.syosetu.com/txtdownload/dlstart/ncode/"
         url.append(String(nnumber ))
         url.append("/?no=")
@@ -253,6 +258,8 @@ print("現在読んでるところ\(no)全話\(last_no)")
         print(url)
         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
             Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
+                self.isLoading = true
+
                 if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
                     do {
                         self.noveltext.append("\n\n--------\(no)/\(self.ndetail.general_all_no)--------\n\n")
@@ -278,6 +285,7 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
                         self.endsetText()
 
                         self.isLoading = false
+print("1self.isLoading:\(self.isLoading)")
                         if(no >= self.ndetail.general_all_no || no >= 3){
                             return
                         }
@@ -291,8 +299,9 @@ print(String(self.ndetail.general_all_no)+" : "+String(no))
     
     
     func getNovel(){
+        print("self.isLoading:\(self.isLoading)")
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = paths[0] + "/narrowreader.realm"
+        let path = paths[0] + "/narrowreader3.realm"
         print(path)
         let url = NSURL(fileURLWithPath: path)
         self.realm = try! Realm(fileURL: url as URL)

@@ -91,7 +91,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     var resultRow : [novelDetai] = []
     open func searchByApi() {
-        var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=20&lim=5&libtype=1&out=json&nocgenre=3&word="
+        var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3&word="
         url.append(self.condition.searchWord.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
         url.append("&notword="+self.condition.notword)
         
@@ -141,60 +141,5 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     
     
-    open func searchByFile() {
-        
-        let file_name = "search.txt"
-
-        if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
-            print(dir)
-            let path_file_name = dir.appendingPathComponent( file_name )
-            do {
-
-                let searchresult: String = try String( contentsOf: path_file_name, encoding: String.Encoding.utf8 )
-                //                print(searchresult)
-                var sr: Data =  searchresult.data(using: String.Encoding.utf8)!
-
-                // パースする
-                let items:NSArray = try JSONSerialization.jsonObject(with: sr, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
-                //                    print(items[1])
-                for n in items {
-                    let i = n as! Dictionary<String,Any?>
-                    if((i["title"] == nil)){continue}
-print(i)
-
-                    var ndetail : novelDetai = novelDetai()
-                    ndetail.ncode = i["ncode"] as! String
-                    ndetail.writer = i["writer"] as! String
-                    ndetail.global_point = i["global_point"] as! Int
-                    ndetail.keyword = i["keyword"] as! String
-                    ndetail.genre = i["genre"] as! Int
-                    ndetail.title = i["title"] as! String
-                    ndetail.userid = i["userid"] as! Int
-                    ndetail.fav_novel_cnt = i["fav_novel_cnt"] as! Int
-                    ndetail.all_point = i["all_point"] as! Int
-                    ndetail.end = i["end"] as! Int
-                    ndetail.all_hyoka_cnt = i["all_hyoka_cnt"] as! Int
-                    ndetail.review_cnt = i["review_cnt"] as! Int
-                    ndetail.general_all_no = i["general_all_no"] as! Int
-//                    ndetail.novelupdated_at = i["novelupdated_at"] as! Date
-//                    ndetail.general_lastup = i["general_lastup"] as! Date
-//                    ndetail.general_firstup = i["general_firstup"] as! Date
-                    ndetail.novel_type = i["novel_type"] as! Int
-                    ndetail.biggenre = i["biggenre"] as! Int
-                    ndetail.length = i["length"] as! Int as! Int
-                    ndetail.story = i["story"] as! String
-                    self.resultRow.append(ndetail)
-                    self.results?.append(["title": i["title"], "ncode" : i["ncode"], "general_all_no":i["general_all_no"], "novel_type": i["novel_type"],"story": i["story"], "general_firstup":i["general_firstup"], "keyword":i["keyword"],  "writer":i["writer"], "general_lastup": i["general_lastup"] ])
-
-                }
-                self.novelcount = (self.resultRow.count)
-                
-
-            } catch {
-                //エラー処理
-            }
-        }
-        
-    }
 
 }
