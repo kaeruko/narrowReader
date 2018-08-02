@@ -8,7 +8,15 @@
 
 import UIKit
 
+
+protocol MenuModalViewControllerDelegate {
+    func modalDidFinished(condition: String)
+}
+
+
 class MenuModalViewController: UIViewController {
+
+    var delegate: MenuModalViewControllerDelegate! = nil
 
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return SearchPresentationController(presentedViewController: presented, presenting: presenting)

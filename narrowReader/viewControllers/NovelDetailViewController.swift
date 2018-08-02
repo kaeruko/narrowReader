@@ -250,7 +250,7 @@ print("現在読んでるところ\(no)全話\(last_no)")
 //        }
 
         var url : String = "https://novel18.syosetu.com/txtdownload/dlstart/ncode/"
-        url.append(String(nnumber ))
+        url.append(String(nnumber))
         url.append("/?no=")
         url.append(String(no))
         url.append("&hankaku=0&code=utf-8&kaigyo=crlf")
@@ -261,6 +261,10 @@ print("現在読んでるところ\(no)全話\(last_no)")
                 self.isLoading = true
 
                 if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                    print("----response.data")
+                    print(response.error)
+                    print(response.response)
+                    print("response.data----")
                     do {
                         self.noveltext.append("\n\n--------\(no)/\(self.ndetail.general_all_no)--------\n\n")
                         self.noveltext.append(utf8Text)
@@ -301,7 +305,7 @@ print("1self.isLoading:\(self.isLoading)")
     func getNovel(){
         print("self.isLoading:\(self.isLoading)")
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = paths[0] + "/narrowreader3.realm"
+        let path = paths[0] + "/narrowreader4.realm"
         print(path)
         let url = NSURL(fileURLWithPath: path)
         self.realm = try! Realm(fileURL: url as URL)

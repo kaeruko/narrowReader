@@ -10,7 +10,18 @@ import UIKit
 import Alamofire
 import RealmSwift
 
-class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource {
+class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource,MenuModalViewControllerDelegate {
+    
+
+    var menuModal : MenuModalViewController = MenuModalViewController()
+    //モーダルを閉じて前の画面を開く
+    func modalDidFinished(condition: String) {
+        self.menuModal.dismiss(animated: true, completion: nil)
+        let result = SearchResultViewController()
+//        result.condition = "aaa"
+        self.navigationController?.pushViewController(result, animated: true)
+    }
+    
     
     var condition : searchCondition = searchCondition()
     var nnumber:Int?
@@ -91,47 +102,66 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     var resultRow : [novelDetai] = []
     open func searchByApi() {
-        var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3&word="
+        var url : String = "https://api.syosetu.com/novelapi/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3&word="
         url.append(self.condition.searchWord.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
         url.append("&notword="+self.condition.notword)
         
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
         //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
         Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
+//            print(response)
 
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                print("----response.data")
+                print(response.error)
+                print(response.response)
+                print("response.data----")
                 var searchresult: Data =  utf8Text.data(using: String.Encoding.utf8)!
                 do {
-                    // パースする
-                    let items:NSArray = try JSONSerialization.jsonObject(with: searchresult, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
 
-                    for n in items {
-                        let i = n as! Dictionary<String,Any?>
+                    if(response.response == nil){
 
-                        if((i["title"] == nil)){continue}
-                        var ndetail : novelDetai = novelDetai()
-                        ndetail.ncode = i["ncode"] as! String
-                        ndetail.writer = i["writer"] as! String
-                        ndetail.global_point = i["global_point"] as! Int
-                        ndetail.keyword = i["keyword"] as! String
-                        ndetail.genre = i["nocgenre"] as! Int
-                        ndetail.title = i["title"] as! String
-                        ndetail.fav_novel_cnt = i["fav_novel_cnt"] as! Int
-                        ndetail.all_point = i["all_point"] as! Int
-                        ndetail.end = i["end"] as! Int
-                        ndetail.all_hyoka_cnt = i["all_hyoka_cnt"] as! Int
-                        ndetail.review_cnt = i["review_cnt"] as! Int
-                        ndetail.general_all_no = i["general_all_no"] as! Int
-                        //                    ndetail.novelupdated_at = i["novelupdated_at"] as! Date
-                        //                    ndetail.general_lastup = i["general_lastup"] as! Date
-                        //                    ndetail.general_firstup = i["general_firstup"] as! Date
-                        ndetail.novel_type = i["novel_type"] as! Int
-                        ndetail.length = i["length"] as! Int as! Int
-                        ndetail.story = i["story"] as! String
-                        self.resultRow.append(ndetail)
+                        var ErrorModal : MenuModalViewController = MenuModalViewController()
+
+                        ErrorModal.modalPresentationStyle = .custom
+                        ErrorModal.delegate = self as! MenuModalViewControllerDelegate
+                        ErrorModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+                        self.present(ErrorModal, animated: true, completion: nil)
+
+                        print("ネットワークにつながっていません")
+                    }else{
+                        // パースする
+                        let items:NSArray = try JSONSerialization.jsonObject(with: searchresult, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                        
+                        for n in items {
+                            let i = n as! Dictionary<String,Any?>
+                            
+                            if((i["title"] == nil)){continue}
+                            var ndetail : novelDetai = novelDetai()
+                            ndetail.ncode = i["ncode"] as! String
+                            ndetail.writer = i["writer"] as! String
+                            ndetail.global_point = i["global_point"] as! Int
+                            ndetail.keyword = i["keyword"] as! String
+                            ndetail.genre = i["nocgenre"] as! Int
+                            ndetail.title = i["title"] as! String
+                            ndetail.fav_novel_cnt = i["fav_novel_cnt"] as! Int
+                            ndetail.all_point = i["all_point"] as! Int
+                            ndetail.end = i["end"] as! Int
+                            ndetail.all_hyoka_cnt = i["all_hyoka_cnt"] as! Int
+                            ndetail.review_cnt = i["review_cnt"] as! Int
+                            ndetail.general_all_no = i["general_all_no"] as! Int
+                            //                    ndetail.novelupdated_at = i["novelupdated_at"] as! Date
+                            //                    ndetail.general_lastup = i["general_lastup"] as! Date
+                            //                    ndetail.general_firstup = i["general_firstup"] as! Date
+                            ndetail.novel_type = i["novel_type"] as! Int
+                            ndetail.length = i["length"] as! Int as! Int
+                            ndetail.story = i["story"] as! String
+                            self.resultRow.append(ndetail)
+                        }
+                        self.setTable()
+                        self.novelcount = (self.resultRow.count)
                     }
-                    self.setTable()
-                    self.novelcount = (self.resultRow.count)
+
                 } catch {
                     print(error)
                 }

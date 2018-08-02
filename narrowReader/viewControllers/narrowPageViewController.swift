@@ -85,6 +85,7 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
     lazy var  searchModal:SearchModalViewController = SearchModalViewController()
 
 
+    
     func modalDidFinished(condition: searchCondition) {
         self.searchModal.dismiss(animated: true, completion: nil)
         let result = SearchResultViewController()

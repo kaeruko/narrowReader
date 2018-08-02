@@ -31,6 +31,7 @@
 		447D3A2920FB196A00AEEA31 /* NovelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A2820FB196A00AEEA31 /* NovelTableViewCell.swift */; };
 		447D3A2B20FB7A0A00AEEA31 /* narrowNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A2A20FB7A0A00AEEA31 /* narrowNavigationViewController.swift */; };
 		447D3A4620FF411500AEEA31 /* NovelDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447D3A4520FF411500AEEA31 /* NovelDetailViewController.swift */; };
+		4494D3D221116A8A0014B981 /* ErrorModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4494D3D121116A8A0014B981 /* ErrorModalViewController.swift */; };
 		44B90CDB2102E65200C602EB /* StringExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B90CDA2102E65200C602EB /* StringExt.swift */; };
 		44D873EF210EC8590040EB9E /* MenuModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D873EE210EC8590040EB9E /* MenuModalViewController.swift */; };
 		C7A17531990E263E1C4DC43F /* Pods_narrowReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8A888C2AF04353E3CDF5161 /* Pods_narrowReader.framework */; };
@@ -98,6 +99,7 @@
 		447D3A2820FB196A00AEEA31 /* NovelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelTableViewCell.swift; sourceTree = "<group>"; };
 		447D3A2A20FB7A0A00AEEA31 /* narrowNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = narrowNavigationViewController.swift; sourceTree = "<group>"; };
 		447D3A4520FF411500AEEA31 /* NovelDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovelDetailViewController.swift; sourceTree = "<group>"; };
+		4494D3D121116A8A0014B981 /* ErrorModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModalViewController.swift; sourceTree = "<group>"; };
 		44B90CDA2102E65200C602EB /* StringExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExt.swift; sourceTree = "<group>"; };
 		44D873EE210EC8590040EB9E /* MenuModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuModalViewController.swift; sourceTree = "<group>"; };
 		45A8173C2072C52ED59ABDF5 /* Pods-narrowReaderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-narrowReaderTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-narrowReaderTests/Pods-narrowReaderTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 			children = (
 				44412E6F20F6E36B001A6919 /* SearchModalViewController.swift */,
 				44D873EE210EC8590040EB9E /* MenuModalViewController.swift */,
+				4494D3D121116A8A0014B981 /* ErrorModalViewController.swift */,
 			);
 			path = modals;
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				447D3A4620FF411500AEEA31 /* NovelDetailViewController.swift in Sources */,
 				44336C8120F6247C007F2C11 /* HomeViewController.swift in Sources */,
 				447D3A2920FB196A00AEEA31 /* NovelTableViewCell.swift in Sources */,
+				4494D3D221116A8A0014B981 /* ErrorModalViewController.swift in Sources */,
 				44412E7020F6E36B001A6919 /* SearchModalViewController.swift in Sources */,
 				444B09D620F72C390033B45F /* narrowBaseViewController.swift in Sources */,
 				447D3A2B20FB7A0A00AEEA31 /* narrowNavigationViewController.swift in Sources */,

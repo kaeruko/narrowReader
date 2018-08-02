@@ -55,7 +55,7 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
 
     func getNovelRist(){
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = paths[0] + "/narrowreader3.realm"
+        let path = paths[0] + "/narrowreader4.realm"
         print(path)
         let url = NSURL(fileURLWithPath: path)
         self.realm = try! Realm(fileURL: url as URL)
