@@ -18,10 +18,6 @@ class MenuModalViewController: UIViewController {
 
     var delegate: MenuModalViewControllerDelegate! = nil
 
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return SearchPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         

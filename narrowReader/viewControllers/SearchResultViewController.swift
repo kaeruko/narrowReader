@@ -82,7 +82,6 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     var TableView : UITableView = UITableView()
 
     open func setTable() {
-
         self.TableView.flashScrollIndicators()
         self.TableView.tableFooterView = UIView()
         self.TableView.delegate      =   self as UITableViewDelegate
@@ -96,7 +95,6 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
             self.TableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             self.TableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
         ])
-
     }
     
     
@@ -109,26 +107,25 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
         //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
         Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
-//            print(response)
-
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
                 print("----response.data")
                 print(response.error)
                 print(response.response)
+//                print(response.response?.value(forKey: "a"))
                 print("response.data----")
+
+                if(response.response == nil){
+                    self.modalname = "error"
+                    var ErrorModal : ErrorModalViewController = ErrorModalViewController()
+                    ErrorModal.modalPresentationStyle = .custom
+                    ErrorModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+                    self.present(ErrorModal, animated: true, completion: nil)
+                }
+
                 var searchresult: Data =  utf8Text.data(using: String.Encoding.utf8)!
                 do {
 
-                    if(response.response == nil){
-
-                        var ErrorModal : ErrorModalViewController = ErrorModalViewController()
-                        ErrorModal.modalPresentationStyle = .custom
-//                        ErrorModal.delegate = self as! ErrorModalViewController
-                        ErrorModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-                        self.present(ErrorModal, animated: true, completion: nil)
-
-                        print("ネットワークにつながっていません")
-                    }else{
+                    if(response.response != nil){
                         // パースする
                         let items:NSArray = try JSONSerialization.jsonObject(with: searchresult, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                         

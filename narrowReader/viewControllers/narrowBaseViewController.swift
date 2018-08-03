@@ -13,6 +13,19 @@ class narrowBaseViewController: UIViewController {
     lazy var frameWidth : CGFloat = self.view.frame.width
     lazy var frameHeight : CGFloat = self.view.frame.height
 
+    open func createUIView(uiview : UIView) -> UIView{
+        uiview.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(uiview)
+        return uiview
+    }
+    
+    open func createLabel() -> UILabel{
+        var label = UILabel(frame:CGRect(x: 0, y: 0, width: 0 , height: 0))
+        label = self.createUIView(uiview: label) as! UILabel
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }
+
     open func layoutElement(target : UIView, element : UIView, attr: NSLayoutAttribute, constant: CGFloat, mult: CGFloat = 1.0){
         target.addConstraint(Constraint(item:element, attr,    to: target, attr,    constant: constant,  multiplier:mult))
     }

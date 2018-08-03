@@ -19,9 +19,7 @@ class SearchPresentationController: UIPresentationController {
 
     
     override func presentationTransitionWillBegin() {
-print("presentationTransitionWillBegin")
         let containerView = self.containerView!
-        
         self.overlay = UIView(frame: containerView.bounds)
         self.overlay.gestureRecognizers = [UITapGestureRecognizer(target: self, action: #selector(self.overlayDidTouch(_:)))]
         containerView.insertSubview(self.overlay, at: 0)
@@ -68,13 +66,11 @@ print("presentationTransitionWillBegin")
 
     override func containerViewWillLayoutSubviews() {
         super.containerViewWillLayoutSubviews()
-print("containerViewWillLayoutSubviews")
         /// レイアウト開始前の処理
         overlayView.frame = containerView!.bounds
         presentedView?.frame = frameOfPresentedViewInContainerView
         presentedView?.layer.cornerRadius = 10
         presentedView?.clipsToBounds = true
-        
     }
     
     

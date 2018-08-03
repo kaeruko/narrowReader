@@ -80,7 +80,6 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
     var modalOriginX : CGFloat = 0.0
     var modalOriginY : CGFloat = 0.0
 
-    var di:SearchPresentationController!
     lazy public var searchBtn: UIButton = self.createSearchButton()
     lazy var  searchModal:SearchModalViewController = SearchModalViewController()
     
@@ -110,11 +109,9 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
         self.searchModal.view.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         self.createNavigationItems()
     }
-    
-    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
-        return SearchPresentationController(presentedViewController: presented, presenting: presenting)
-    }
 
+    
+    var modalname : String = ""
     
     func navigationController() {
         print("navigationController")
@@ -138,15 +135,13 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
         self.navigationItem.title = self.title
     }
     
-    open func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
 
-        print("presentationController")
-        di = SearchPresentationController(presentedViewController: presented, presenting: presenting)
-        di.modalWidth = self.modalWidth
-        di.modalHeight = self.modalHeight
-        di.modalOriginX = self.modalOriginX
-        di.modalOriginY = self.modalOriginY
-        return di
+    open func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        if(self.modalname == "search"){
+            return SearchPresentationController(presentedViewController: presented, presenting: presenting)
+        }else{
+            return ErrorPresentationController(presentedViewController: presented, presenting: presenting)
+        }
     }
     
     open func createSearchButton() -> UIButton{
@@ -161,6 +156,7 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
     }
     
     @objc open func doBtn(sender : UIButton) {
+        self.modalname = "search"
         self.searchModal.modalPresentationStyle = .custom
         self.searchModal.delegate = self as! SearchModalViewControllerDelegate        
         self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate

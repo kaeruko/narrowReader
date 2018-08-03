@@ -27,11 +27,7 @@ import Alamofire
 import RealmSwift
 
 class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, UIPickerViewDelegate,UIToolbarDelegate, UIPickerViewDataSource {
-    
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return SearchPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-    
+        
     func textFieldDidBeginEditing(_ textField: UITextField){
         print("textFieldDidBeginEditing:" + textField.text!)
     }
@@ -114,20 +110,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     
     lazy var submitButton : UIButton = self.createButton()
     var scondition : searchCondition = searchCondition()
-    
-    open func createUIView(uiview : UIView) -> UIView{
-        uiview.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(uiview)
-        return uiview
-    }
-    
-    open func createLabel() -> UILabel{
-        var label = UILabel(frame:CGRect(x: 0, y: 0, width: 0 , height: 0))
-        label = self.createUIView(uiview: label) as! UILabel
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }
-    
+        
     open func createButton() -> UIButton{
         var btn = UIButton(frame:CGRect(x: 0, y: 0, width: 0 , height: 0))
         btn = self.createUIView(uiview: btn) as! UIButton
