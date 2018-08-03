@@ -17,13 +17,26 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
     var resultRow : [Novels] = []
     var TableView : UITableView = UITableView()
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "narrow-reader"
-        self.view.backgroundColor = UIColor.white
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.getNovelRist()
+    }
+
+    var did : Bool = false
+    override func viewWillAppear(_ animated: Bool) {
+        print("viewWillAppear \(self.did)")
+        super.viewWillAppear(animated)
+        if(self.did == false) {
+            self.title = "narrow-reader"
+            self.view.backgroundColor = UIColor.white
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            self.getNovelRist()
+            self.did = true
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        self.did = false
+        print("viewWillDisappear \(self.did)")
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -54,19 +67,26 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
 
 
     func getNovelRist(){
+        self.resultRow = []
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let path = paths[0] + "/narrowreader4.realm"
         print(path)
         let url = NSURL(fileURLWithPath: path)
         self.realm = try! Realm(fileURL: url as URL)
-
+        
         if var favorites : Results<Favorites> = self.realm.objects(Favorites.self){
+print(favorites)
             for fav in favorites {
+                print(fav)
                 if var novel : Novels = self.realm.objects(Novels.self).filter("ncode ='\(fav.ncode)'").first{
                     self.resultRow.append(novel)
                 }
             }
             self.novelcount = self.resultRow.count
+            self.setTable()
+        }else{
+print("koko")
+            self.novelcount = 0
             self.setTable()
         }
     }
@@ -86,6 +106,7 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
             self.TableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             self.TableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
         ])
+        self.TableView.reloadData()
     }
 
 

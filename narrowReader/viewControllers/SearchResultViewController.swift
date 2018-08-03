@@ -15,7 +15,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
 
     var menuModal : MenuModalViewController = MenuModalViewController()
     //モーダルを閉じて前の画面を開く
-    func modalDidFinished(condition: String) {
+    func MenuModalDidFinished(condition: String) {
         self.menuModal.dismiss(animated: true, completion: nil)
         let result = SearchResultViewController()
 //        result.condition = "aaa"
@@ -102,7 +102,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     var resultRow : [novelDetai] = []
     open func searchByApi() {
-        var url : String = "https://api.syosetu.com/novelapi/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3&word="
+        var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3&word="
         url.append(self.condition.searchWord.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
         url.append("&notword="+self.condition.notword)
         
@@ -121,10 +121,9 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
 
                     if(response.response == nil){
 
-                        var ErrorModal : MenuModalViewController = MenuModalViewController()
-
+                        var ErrorModal : ErrorModalViewController = ErrorModalViewController()
                         ErrorModal.modalPresentationStyle = .custom
-                        ErrorModal.delegate = self as! MenuModalViewControllerDelegate
+//                        ErrorModal.delegate = self as! ErrorModalViewController
                         ErrorModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
                         self.present(ErrorModal, animated: true, completion: nil)
 

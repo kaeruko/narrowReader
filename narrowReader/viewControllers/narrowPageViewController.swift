@@ -83,10 +83,8 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
     var di:SearchPresentationController!
     lazy public var searchBtn: UIButton = self.createSearchButton()
     lazy var  searchModal:SearchModalViewController = SearchModalViewController()
-
-
     
-    func modalDidFinished(condition: searchCondition) {
+    func SearchModalDidFinished(condition: searchCondition) {
         self.searchModal.dismiss(animated: true, completion: nil)
         let result = SearchResultViewController()
         result.condition = condition
@@ -164,8 +162,7 @@ class narrowPageViewController: narrowBaseViewController, SearchModalViewControl
     
     @objc open func doBtn(sender : UIButton) {
         self.searchModal.modalPresentationStyle = .custom
-        self.searchModal.delegate = self as! SearchModalViewControllerDelegate
-        
+        self.searchModal.delegate = self as! SearchModalViewControllerDelegate        
         self.searchModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
         present(self.searchModal, animated: true, completion: nil)
     }

@@ -7,7 +7,7 @@
 //
 
 protocol SearchModalViewControllerDelegate {
-    func modalDidFinished(condition: searchCondition)
+    func SearchModalDidFinished(condition: searchCondition)
 }
 
 class searchCondition{
@@ -390,7 +390,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
         print(self.scondition.order)
         print(self.scondition)
 
-        self.delegate?.modalDidFinished(condition: self.scondition)
+        self.delegate?.SearchModalDidFinished(condition: self.scondition)
     }
     
     

@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol MenuModalViewControllerDelegate {
-    func modalDidFinished(condition: String)
+    func MenuModalDidFinished(condition: String)
 }
 
 
