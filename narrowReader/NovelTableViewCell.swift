@@ -82,7 +82,7 @@ class NovelTableViewCell: UITableViewCell {
             self.summary.topAnchor.constraint(equalTo: topAnchor, constant: self.frame.height * 2.0),
             self.summary.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
             self.summary.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-            self.summary.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
+            self.summary.bottomAnchor.constraint(equalTo: bottomAnchor, constant: self.frame.height * -0.3),
         ])
 
     }

@@ -19,6 +19,12 @@ class narrowBaseViewController: UIViewController {
         return uiview
     }
     
+    open func createButton() -> UIButton{
+        var btn = UIButton(frame:CGRect(x: 0, y: 0, width: 0 , height: 0))
+        btn = self.createUIView(uiview: btn) as! UIButton
+        return btn
+    }
+
     open func createLabel() -> UILabel{
         var label = UILabel(frame:CGRect(x: 0, y: 0, width: 0 , height: 0))
         label = self.createUIView(uiview: label) as! UILabel

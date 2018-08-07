@@ -110,13 +110,7 @@ class SearchModalViewController: narrowBaseViewController, UITextFieldDelegate, 
     
     lazy var submitButton : UIButton = self.createButton()
     var scondition : searchCondition = searchCondition()
-        
-    open func createButton() -> UIButton{
-        var btn = UIButton(frame:CGRect(x: 0, y: 0, width: 0 , height: 0))
-        btn = self.createUIView(uiview: btn) as! UIButton
-        return btn
-    }
-    
+
     open func createSwitch() -> UISwitch{
         var swt = UISwitch(frame:CGRect(x: 0, y: 0, width: 0 , height: 0))
         swt = self.createUIView(uiview: swt) as! UISwitch

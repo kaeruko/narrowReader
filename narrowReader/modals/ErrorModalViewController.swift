@@ -9,7 +9,8 @@
 import UIKit
 
 class ErrorMessage{
-    var errortext : String = ""
+    var error_title : String = ""
+    var error_text : String = ""
 }
 
 class ErrorPresentationController: UIPresentationController {
@@ -59,14 +60,31 @@ class ErrorModalViewController: narrowBaseViewController {
 
     lazy var titleLabel : UILabel = self.createLabel()
     lazy var subTitleLabel : UILabel = self.createLabel()
-
+    lazy var submitButton : UIButton = self.createButton()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
         self.titleLabel.text = "ネットワークにつながっていません"
-        self.layoutElement(target: self.view, element: self.titleLabel, attr: NSLayoutAttribute.top, constant: 10)
+        self.layoutElement(target: self.view, element: self.titleLabel, attr: NSLayoutAttribute.top, constant: 30)
+        self.layoutElement(target: self.view, element: self.titleLabel, attr: NSLayoutAttribute.leading, constant: 10)
 
+        self.submitButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        self.submitButton.setTitle("再接続", for: .normal)
+        self.submitButton.setTitleColor(UIColor.white, for: .normal)
+        self.submitButton.backgroundColor = UIColor.black
+        self.submitButton.addTarget(self, action: #selector(self.reConnect(sender:)), for:.touchUpInside)
+        self.layoutElement(target: self.view, element: self.submitButton, attr: NSLayoutAttribute.bottom, constant: -50)
+        self.layoutElement(target: self.view, element: self.submitButton, attr: NSLayoutAttribute.centerX, constant: 0)
     }
+
+    @objc open func reConnect(sender : UIButton) {
+        let result = SearchResultViewController()
+//        result.condition = nil
+        self.navigationController?.pushViewController(result, animated: true)
+        self.dismiss(animated: true, completion: nil)
+    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

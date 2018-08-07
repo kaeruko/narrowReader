@@ -10,17 +10,9 @@ import UIKit
 import Alamofire
 import RealmSwift
 
-class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource,MenuModalViewControllerDelegate {
+class SearchResultViewController: narrowPageViewController,  UITableViewDelegate, UITableViewDataSource {
     
-
-    var menuModal : MenuModalViewController = MenuModalViewController()
-    //モーダルを閉じて前の画面を開く
-    func MenuModalDidFinished(condition: String) {
-        self.menuModal.dismiss(animated: true, completion: nil)
-        let result = SearchResultViewController()
-//        result.condition = "aaa"
-        self.navigationController?.pushViewController(result, animated: true)
-    }
+    private let refreshControl = UIRefreshControl()
     
     
     var condition : searchCondition = searchCondition()
@@ -103,15 +95,12 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3&word="
         url.append(self.condition.searchWord.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
         url.append("&notword="+self.condition.notword)
-        
-        //https://api.syosetu.com/novel18api/api/?libtype=1&out=json&word=%E7%9B%A3%E7%A6%81
-        //https://novel18.syosetu.com/txtdownload/dlstart/ncode/1250059/?no=1&hankaku=0&code=utf-8&kaigyo=crlf
+
+        refreshControl.beginRefreshing()
         Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
                 print("----response.data")
                 print(response.error)
-                print(response.response)
-//                print(response.response?.value(forKey: "a"))
                 print("response.data----")
 
                 if(response.response == nil){

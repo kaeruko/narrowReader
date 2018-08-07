@@ -45,7 +45,7 @@ class NovelDetailViewController: narrowPageViewController, UIScrollViewDelegate 
         self.menubtn.setTitleColor(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1), for: .normal)
         self.menubtn.setTitle("menu", for: .normal)
         self.menubtn.setTitleColor(UIColor.white, for: .normal)
-        self.menubtn.addTarget(self, action: #selector(self.openMenu(sender:)), for:.touchUpInside)
+//        self.menubtn.addTarget(self, action: #selector(self.openMenu(sender:)), for:.touchUpInside)
         self.footer.addSubview(self.menubtn)
         
         self.favbtn.frame = CGRect(x: ((self.footer.frame.width) - (menuwidth)) * 0.1, y: menuy, width: menuwidth, height: menuheight)
@@ -66,13 +66,6 @@ class NovelDetailViewController: narrowPageViewController, UIScrollViewDelegate 
         self.getNovel()
     }
     
-    var MenuModal : MenuModalViewController = MenuModalViewController()
-    @objc open func openMenu(sender : UIButton) {
-        self.MenuModal.modalPresentationStyle = .custom
-//        self.MenuModal.delegate = self as! SearchModalViewControllerDelegate
-        self.MenuModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-        present(self.MenuModal, animated: true, completion: nil)
-    }
 
     func isFavorite(){
 
@@ -256,7 +249,7 @@ print("naka")
                 self.noveltext.append("\n\n--------⬅\(story.no)/\(self.novelModel.general_all_no) --------\n\n")
 print("realmに保存：\(story.no)")
             }
-            self.textView.font = UIFont.systemFont(ofSize: 12)
+            self.textView.font = UIFont.systemFont(ofSize: 20)
             self.textView.text = self.noveltext
             //更新があれば次の一話取得。その後は遅延ロードに任せる
 print("現在読んでるところ\(no)全話\(last_no)")
@@ -325,7 +318,7 @@ print("現在読んでるところ\(no)全話\(last_no)")
                                 self.realm.add(newStory)
                             }
                             print(String(self.ndetail.general_all_no)+" : "+String(no))
-                            self.textView.font = UIFont.systemFont(ofSize: 12)
+                            self.textView.font = UIFont.systemFont(ofSize: 20)
                             self.textView.text = self.noveltext
                             self.endsetText()
                             
