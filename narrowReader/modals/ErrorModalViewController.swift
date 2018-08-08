@@ -70,7 +70,7 @@ class ErrorModalViewController: narrowBaseViewController {
         self.layoutElement(target: self.view, element: self.titleLabel, attr: NSLayoutAttribute.leading, constant: 10)
 
         self.submitButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        self.submitButton.setTitle("再接続", for: .normal)
+        self.submitButton.setTitle("OK", for: .normal)
         self.submitButton.setTitleColor(UIColor.white, for: .normal)
         self.submitButton.backgroundColor = UIColor.black
         self.submitButton.addTarget(self, action: #selector(self.reConnect(sender:)), for:.touchUpInside)

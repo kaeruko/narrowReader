@@ -105,8 +105,9 @@ print("naka")
     }
 
     @objc open func addBookmark(sender : UIButton) {
+print(self.novelModel.bookmark)
         try! self.realm.write() {
-            self.novelModel.bookmark = 1
+            self.novelModel.bookmark = self.nowOffsety
         }
     }
 
@@ -135,12 +136,14 @@ print("naka")
     }
 
     var isLoading : Bool = false
+    var nowOffsety : CGFloat = 0
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.footer.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.1)
         self.menubtn.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.1)
         self.favbtn.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.1)
         self.bkbtn.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.1)
-
+        self.nowOffsety = scrollView.contentOffset.y
+        
         var isBouncing : Bool = false
 //        print("scrollViewDidScroll \(scrollView.bounces)")
 //        isBouncing = (scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)) > 0.9
@@ -257,6 +260,7 @@ print("現在読んでるところ\(no)全話\(last_no)")
             let isbookmark = true
             if(isbookmark){
                 self.endsetText()
+                //一番下
                 let a  = CGPoint(x:0, y:(self.scrollView.contentSize.height - self.scrollView.bounds.size.height))
                 print("\(a)に移動")
                 self.scrollView.setContentOffset(a, animated: false)
@@ -342,7 +346,7 @@ print("現在読んでるところ\(no)全話\(last_no)")
     func getNovel(){
         print("self.isLoading:\(self.isLoading)")
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = paths[0] + "/narrowreader4.realm"
+        let path = paths[0] + "/narrowreader5.realm"
         print(path)
         let url = NSURL(fileURLWithPath: path)
         self.realm = try! Realm(fileURL: url as URL)

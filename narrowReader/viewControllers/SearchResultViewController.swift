@@ -40,10 +40,7 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.novelcount
-
     }
-
-
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(NovelTableViewCell.self), for: indexPath) as! NovelTableViewCell
@@ -89,7 +86,44 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
         ])
     }
     
+    var errorview : UIView = UIView()
+
+    open func setError() {
+        self.errorview.frame = CGRect(x: self.view.frame.width * 0.1, y: self.view.frame.height * 0.1, width: self.view.frame.width * 0.8 , height: self.view.frame.height * 0.5)
+        self.view.addSubview(self.errorview)
+        self.errorview.backgroundColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+        var titleLabel : UILabel = UILabel()
+        var subTitleLabel : UILabel = UILabel()
+        var submitButton : UIButton = UIButton()
+
+        self.errorview.addSubview(titleLabel)
+        self.errorview.addSubview(subTitleLabel)
+        self.errorview.addSubview(submitButton)
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.adjustsFontSizeToFitWidth = true
+        subTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subTitleLabel.adjustsFontSizeToFitWidth = true
+        submitButton.translatesAutoresizingMaskIntoConstraints = false
+
+        titleLabel.text = "ネットワークにつながっていません"
+        self.layoutElement(target: self.errorview, element: titleLabel, attr: NSLayoutAttribute.top, constant: 30)
+        self.layoutElement(target: self.errorview, element: titleLabel, attr: NSLayoutAttribute.leading, constant: 10)
+
+        submitButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        submitButton.setTitle("再接続", for: .normal)
+        submitButton.setTitleColor(UIColor.white, for: .normal)
+        submitButton.backgroundColor = UIColor.black
+        submitButton.addTarget(self, action: #selector(self.reConnect(sender:)), for:.touchUpInside)
+        self.layoutElement(target: self.errorview, element: submitButton, attr: NSLayoutAttribute.bottom, constant: -50)
+        self.layoutElement(target: self.errorview, element: submitButton, attr: NSLayoutAttribute.centerX, constant: 0)
+    }
     
+    @objc open func reConnect(sender : UIButton) {
+        self.viewDidLoad()
+        self.errorview.removeFromSuperview()
+    }
+
     var resultRow : [novelDetai] = []
     open func searchByApi() {
         var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3&word="
@@ -104,11 +138,16 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
                 print("response.data----")
 
                 if(response.response == nil){
-                    self.modalname = "error"
-                    var ErrorModal : ErrorModalViewController = ErrorModalViewController()
-                    ErrorModal.modalPresentationStyle = .custom
-                    ErrorModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
-                    self.present(ErrorModal, animated: true, completion: nil)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.setError()
+                    }
+
+//
+//                    self.modalname = "error"
+//                    var ErrorModal : ErrorModalViewController = ErrorModalViewController()
+//                    ErrorModal.modalPresentationStyle = .custom
+//                    ErrorModal.transitioningDelegate = self as! UIViewControllerTransitioningDelegate
+//                    self.present(ErrorModal, animated: true, completion: nil)
                 }
 
                 var searchresult: Data =  utf8Text.data(using: String.Encoding.utf8)!

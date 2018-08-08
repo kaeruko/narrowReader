@@ -48,7 +48,7 @@ class Novels: Object{
     @objc dynamic var length : Int = 0
     @objc dynamic var story : String = ""   //あらすじ
     @objc dynamic var last_read_no : Int = 0
-    @objc dynamic var bookmark : Int = 0
+    @objc dynamic var bookmark : CGFloat = 0
 }
 
 class Stories: Object{
