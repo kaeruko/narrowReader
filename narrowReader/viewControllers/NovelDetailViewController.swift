@@ -105,7 +105,8 @@ print("naka")
     }
 
     @objc open func addBookmark(sender : UIButton) {
-print(self.novelModel.bookmark)
+        print("bookmark: \(self.novelModel.bookmark)")
+        print("nowOffsety: \(self.nowOffsety)")
         try! self.realm.write() {
             self.novelModel.bookmark = self.nowOffsety
         }
@@ -153,7 +154,7 @@ print(self.novelModel.bookmark)
             return
         }
 //        print("\(scrollView.contentOffset.y) / \(scrollView.bounds.size.height) \(scrollView.contentSize.height)")
-////        print((scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)))
+//        print((scrollView.contentOffset.y / (scrollView.contentSize.height - scrollView.bounds.size.height)))
 //        print((scrollView.contentSize.height - scrollView.bounds.size.height) - scrollView.contentOffset.y  )
 
         if(isBouncing){
@@ -261,7 +262,8 @@ print("現在読んでるところ\(no)全話\(last_no)")
             if(isbookmark){
                 self.endsetText()
                 //一番下
-                let a  = CGPoint(x:0, y:(self.scrollView.contentSize.height - self.scrollView.bounds.size.height))
+//                let a  = CGPoint(x:0, y:(self.scrollView.contentSize.height - self.scrollView.bounds.size.height))
+                let a  = CGPoint(x:0, y:self.novelModel.bookmark+62)
                 print("\(a)に移動")
                 self.scrollView.setContentOffset(a, animated: false)
             }

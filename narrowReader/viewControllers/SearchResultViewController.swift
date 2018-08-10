@@ -125,10 +125,27 @@ class SearchResultViewController: narrowPageViewController,  UITableViewDelegate
     }
 
     var resultRow : [novelDetai] = []
+
+
+//    var searchWord : String = ""
+//    var notword : String = ""
+//    var chkTitleName : Bool = true
+//    var chkPlotName : Bool = true
+//    var chkKeywordName : Bool = true
+//    var chkAutherName : Bool = true
+//    var order : Int = 0
+//    var genre : Int = 0
+
+
+
     open func searchByApi() {
-        var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3&word="
-        url.append(self.condition.searchWord.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
-        url.append("&notword="+self.condition.notword)
+        var url : String = "https://api.syosetu.com/novel18api/api/?maxtime=200&lim=20&libtype=1&out=json&nocgenre=3"
+        if(self.condition.searchWord != ""){
+            url.append("&word=" + self.condition.searchWord.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
+        }
+        if(self.condition.notword != ""){
+            url.append("&notword=" + self.condition.notword.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.alphanumerics )!)
+        }
 
         refreshControl.beginRefreshing()
         Alamofire.request(url, headers:["Cookie": "over18=yes;"]).response { response in

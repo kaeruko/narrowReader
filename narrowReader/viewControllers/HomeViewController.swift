@@ -34,6 +34,27 @@ class HomeViewController: narrowPageViewController, UITableViewDelegate, UITable
         }
     }
 
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        self.TableView.isEditing = editing
+    }
+
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            try! self.realm.write {
+                self.realm.delete(self.resultRow[indexPath.row])
+                self.resultRow.remove(at: indexPath.row)
+                self.novelcount = self.resultRow.count
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         self.did = false
         print("viewWillDisappear \(self.did)")
@@ -84,8 +105,9 @@ print(favorites)
             }
             self.novelcount = self.resultRow.count
             self.setTable()
+            self.navigationItem.leftBarButtonItem = editButtonItem
+
         }else{
-print("koko")
             self.novelcount = 0
             self.setTable()
         }
